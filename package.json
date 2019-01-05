@@ -1,0 +1,36 @@
+{
+  "name": "space2.0",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "start": "vue-cli-service serve"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "element-ui": "^2.4.9",
+    "mapbox-gl": "^0.52.0-beta.1",
+    "unzip": "^0.1.11",
+    "vue": "^2.5.17",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.1",
+    "@vue/cli-service": "^3.0.1",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "vue-template-compiler": "^2.5.17"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
+}

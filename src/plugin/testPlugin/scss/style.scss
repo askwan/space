@@ -1,0 +1,8 @@
+#map{
+  .mapboxgl-ctrl-attrib{
+    display: none;
+  }
+  .mapboxgl-ctrl-bottom-left div:last-child {
+    display: none !important;
+  }
+}

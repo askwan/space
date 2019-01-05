@@ -1,0 +1,9 @@
+body{
+  min-width: 1200px;
+  overflow-x: auto;
+}
+
+::-webkit-scrollbar, ::-webkit-scrollbar-track-piece {
+  width: 5px;
+  background-color: #ededed;
+}

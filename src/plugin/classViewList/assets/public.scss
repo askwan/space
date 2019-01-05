@@ -1,0 +1,11 @@
+$--tree-node-hover-color: rgba(67, 71, 77, 1);
+
+.view-list{
+    .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content{
+        background-color: rgba(67, 71, 77, 1);
+    }
+    .el-tree-node .el-tree-node__content{
+        background-color: #333;
+        color: #fff;
+    }
+}
