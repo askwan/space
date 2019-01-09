@@ -32,7 +32,7 @@ export default {
     };
   },
   mixins: [config],
-  props: ["plugins", "view"],
+  props: ["plugins", "view","sdomain"],
   components: {
     MoveBox
   },
@@ -82,7 +82,7 @@ export default {
         // this.leftOrRight("dddd", 0, 0, 300, height, false);
       };
       document.body.onresize = () => {
-        console.log("改变")
+        // console.log("改变")
         bodyHeight = document.body.clientHeight;
         bodyWidth = document.body.clientWidth;
         this.manage.uiFunction.calcBody({

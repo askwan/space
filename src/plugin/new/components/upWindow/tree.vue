@@ -91,7 +91,12 @@ export default {
       console.log(event, obj);
 
       this.posi.x = event.clientX;
-      this.posi.y = event.clientY - 175;
+      if(this.$route.path == '/view'){
+        this.posi.y = event.clientY - 55
+      }else{
+        this.posi.y = event.clientY - 175;
+      }
+      
       console.log(this.posi);
       clearTimeout(timer);
       timer = setTimeout(() => {

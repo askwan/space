@@ -21,7 +21,6 @@
   import {space} from "@/server/util";
   import {userCenter} from "@/server/newUrl.js";
   import {ucOnegis} from "@/server/newUrl.js";
-  console.log(space)
   export default {
     data () {
       return {

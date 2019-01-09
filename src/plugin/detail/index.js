@@ -7,6 +7,7 @@ export default new PluginBase({
   tabs:'综合信息',
   title:'pull',
   icon:'el-icon-time',
+  type:3,
   toolbar:true,
   options:[{
     fn(){

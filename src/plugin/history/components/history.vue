@@ -61,6 +61,7 @@ export default {
     objectDetail(val) {
       this.versionList = [];
       if (val) {
+        console.log(val,200000)
         this.versionList = val.actions;
         // console.log(this.versionList)
       }
@@ -83,6 +84,7 @@ export default {
           loadAction: true // 是否载入操作集合
       };
       getVal.ajaxData(par).then(res=>{
+          // console.log(res)
           this.objectDetail = res[0];
 
       })
@@ -112,7 +114,7 @@ export default {
             arr.push(item);
           }
         });
-        // console.log(arr)
+        console.log(arr)
         return arr;
       } else {
         return data;
@@ -122,6 +124,7 @@ export default {
       return val;
     },
     getTime(val) {
+      console.log(val,this.userCommon)
       return (
         this.userCommon.TimeShift(val, 1).date +
         " " +

@@ -6,8 +6,8 @@
         </div>
       </div>
        <div v-if="content == 'center'">
-        <div v-for="o in 5" :key="o" class="text item">
-          {{'酸辣粉 ' + o }}
+        <div v-for="o in 4" :key="o" class="text item">
+          {{'列表内容222222 ' + o }}
         </div>
       </div>
       <div v-if="content == 'bottom'">
@@ -16,11 +16,6 @@
         </div>
       </div>
 
-      <div v-if="content == 'list'">
-        <div v-for="o in 4" :key="o" class="text item">
-          {{'列表内容222222 ' + o }}
-        </div>
-      </div>
     </div>
 </template>
 <script>

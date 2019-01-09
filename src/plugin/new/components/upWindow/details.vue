@@ -30,7 +30,7 @@ import CRelation from "../part/relation";
 export default {
   data() {
     return {
-        activeNames: [],
+        activeNames: ['1','2','3','4']
     };
   },
   props: {},

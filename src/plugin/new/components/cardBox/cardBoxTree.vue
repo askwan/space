@@ -1,5 +1,5 @@
 <template>
-    <cards :title="title" :num="num">
+    <cards :title="title" class="treeCard height-100">
       <tree :loading="loading"></tree>
     </cards>
 </template>
@@ -8,7 +8,6 @@ export default {
   data() {
     return {
       title: "对象树",
-      num: 3
     };
   },
   props: ["loading"],
@@ -24,4 +23,5 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+
 </style>

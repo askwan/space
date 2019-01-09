@@ -8,6 +8,7 @@ const p = {
   title:'pull',
   icon:'el-icon-time',
   toolbar:false,
+  type:2,
   options:[{
     fn(){
       console.log('setting')
@@ -38,4 +39,3 @@ const p = {
 }
 
 export default new PluginBase(p);
-

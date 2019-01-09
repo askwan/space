@@ -1,8 +1,10 @@
 import axios from 'axios';
 import Vue from 'vue';
-import {
-  ucOnegis,
-} from "../userUtil.js";
+// import {
+//   ucOnegis,
+// } from "../userUtil.js";
+import {ucOnegis} from "@/server/newUrl.js"
+
 let vm = new Vue();
 
 let axiosMain = axios.create({

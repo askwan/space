@@ -6,8 +6,10 @@ class Point extends publicFun {
   }
   create(lonlat, sobject, node, pick) {
     let floorObj = new THREE.Group();
-    let obj=this.getDataObj(lonlat, sobject,node)
-    
+    floorObj.name=sobject.name
+    floorObj.sobject=sobject
+    let obj = this.getDataObj(lonlat, sobject, node)
+
     // let color = this.getColors(sobject.data)
 
     let lonlatArr = []
@@ -24,7 +26,7 @@ class Point extends publicFun {
 
     circle.position.x += lonlatArr.x
     circle.position.y += lonlatArr.y
-    circle.position.z += obj.topLength + 0.15
+    circle.position.z += Number(obj.minHeight) + 0.1
     floorObj.add(circle);
     return floorObj
   }

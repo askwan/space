@@ -1,5 +1,5 @@
 <template>
-  <cards :title="title" :num="num">
+  <cards :title="title" class="height-100">
     <c-operation :loading="loading"></c-operation>
   </cards>
 </template>
@@ -8,7 +8,6 @@ export default {
   data() {
     return {
       title: "操作面板",
-      num: 3
       // state:"开启",
     };
   },

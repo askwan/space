@@ -10,6 +10,7 @@ const p = {
   icon:'',
   toolbar:false,
   options:[],
+  type:2,
   inited(){
     // _bus.$on('middle.mapReady',manage=>{
     //   this.store.manage = manage;

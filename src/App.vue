@@ -25,7 +25,7 @@ import {ucOnegis} from "@/server/newUrl.js"
     },
     mounted() {
       this.ucOnegi = ucOnegis + window.location.href;
-      console.log(this.ucOnegi)
+      // console.log(this.ucOnegi)
       // this.$router.go(this.ucOnegi);
       let url = location.href
       let num = url.indexOf("view")
@@ -47,6 +47,7 @@ $nav-height:50px;
   height: 100%;
   overflow: hidden;
   position: relative;
+  overflow-y: auto;
 }
 .app-height{
   height: calc(100% - #{$nav-height});

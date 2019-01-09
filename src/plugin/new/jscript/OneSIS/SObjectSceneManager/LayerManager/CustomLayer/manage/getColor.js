@@ -26,6 +26,17 @@ class ColorList {
       }
 
     }
+    if (objs.color instanceof Array) {
+      for (let i = 0; i < objs.color.length; i++) {
+        let n = objs.color[i]
+        if (n[0] == '#') {
+          objs = {
+            color: n,
+            opacity: 0.5
+          }
+        }
+      }
+    } else {}
     return objs
   }
   getStyleId(obj) {
@@ -40,7 +51,8 @@ class ColorList {
         style = form.style
       }
     }
-    if (style && style[0]) {
+    if (style) {
+      style = JSON.parse(style)
       return this.getStyle(style[0])
     } else {
       if (!obj.otype.formStyles) {

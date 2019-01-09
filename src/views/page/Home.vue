@@ -55,8 +55,8 @@
                     </div>
 
                       <div class="mask">
-                          <i class="el-icon-edit" title="编辑插件" @click="edit(app)"></i><i class="el-icon-delete" title="删除" @click="delet(app)"></i>
-                          <i class="el-icon-view" title="预览" @click="view(app)"></i><i class="el-icon-edit-outline" title="编辑app" @click="editApp(app)"></i>
+                          <i class="el-icon-edit" title="编辑插件" @click="edit(app)"></i>
+                          <i class="el-icon-view" title="预览" @click="view(app)"></i><i class="el-icon-edit-outline" title="编辑app" @click="editApp(app)"></i><i class="el-icon-delete" title="删除" @click="delet(app)"></i>
                       </div>
                   </li>
 
@@ -69,10 +69,10 @@
     </div>
 </template>
 <script>
-import server from '@/server.js'
+// import server from '@/server.js'
 import {serverApp} from '@/server/index.js'
 import userMgr from "@/server/userUtil.js";
-import {readyServer} from '@/localServer'
+import {readyServer,pluginServer} from '@/localServer'
 export default {
   data() {
     return {
@@ -99,13 +99,17 @@ export default {
         this.lists.forEach(el=>{
           lists.push(el.layout);
           lists.push(el.mapView);
+          el.plugins = el.plugins ||[]
           el.plugins.forEach(ev=>{
             lists.push(ev.name);
           });
         })
         // console.log(lists,55555);
-        readyServer.loadSource({lists:lists}).then(res=>{
-          console.log(res,'loadServer');
+        // readyServer.loadSource({lists:lists}).then(res=>{
+        //   console.log(res,'loadServer');
+        // });
+        pluginServer.query({type:2}).then(res=>{
+          console.log(res);
         })
      }
     })
@@ -303,6 +307,9 @@ export default {
               left: 50%;
               top: 50%;
               transform: translate(-50%,-50%);
+              &>div{
+                margin-top: 4px;
+              }
             }
           }
           .quarter{

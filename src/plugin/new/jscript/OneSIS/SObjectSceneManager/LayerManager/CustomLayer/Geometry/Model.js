@@ -7,6 +7,8 @@ class Model extends publicFun{
   }
   create(lonlat, sobject,node) {
     let floorObj = new THREE.Object3D();
+    floorObj.name=sobject.name
+    floorObj.sobject=sobject
     let form=sobject.forms[0]
     let style = form.style[0]
     let loader = new THREE.GLTFLoader();

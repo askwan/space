@@ -17,13 +17,13 @@ class MapboxGL {
     this.center = data.center
     this.SObjectList = []
     this.allLayer = {
-      'pipelineLayer': new PipelineLayer(),
+      // 'pipelineLayer': new PipelineLayer(),
       'otherLayer': new OtherLayer(),
-      'modelLayer': new ModelLayer(),
-      'buildingLayer': new BuildingLayer(),
+      // 'modelLayer': new ModelLayer(),
+      // 'buildingLayer': new BuildingLayer(),
     }
 
-    this.sobjNum=0
+    this.sobjNum=1
     this.init(data)
   }
   init(data) {
@@ -82,7 +82,8 @@ class MapboxGL {
     });
   }
   start(data) {
-    let lonlat = [(data.geoBox.maxx + data.geoBox.minx) / 2, (data.geoBox.maxy + data.geoBox.miny) / 2]
+    let obj=data[0]
+    let lonlat = [(obj.geoBox.maxx + obj.geoBox.minx) / 2, (obj.geoBox.maxy + obj.geoBox.miny) / 2]
     this.map.flyTo({
       center: lonlat,
       pitch: 45
@@ -92,7 +93,7 @@ class MapboxGL {
       layer.remove()
       layer.setLonLat(lonlat)
     }
-    this.recursion([data])
+    this.recursion(data)
   }
   recursion(list, floor) {
     for (let i = 0; i < list.length; i++) {

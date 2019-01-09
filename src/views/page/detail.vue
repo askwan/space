@@ -1,6 +1,6 @@
 <template>
     <div class="detail fill">
-      <div class="leader cle">
+      <div class="leader pd-small">
         <b>{{config.name}}</b>
         <a href="" class="back">我的 App</a>
         <div class="tab-but">
@@ -26,7 +26,7 @@
       </ul>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <el-button @click="backPlugin()">取 消</el-button>
         <el-button type="primary" @click="addPlugin()">确 定</el-button>
       </span>
     </el-dialog>
@@ -36,7 +36,8 @@
 // import plugin from './js/plugin-list.js'
 // import collection from '@/data.js'
 let _id;
-import server from '@/server.js'
+// import server from '@/server.js'
+import {readyServer,pluginServer} from '@/localServer'
 import {serverApp} from '@/server/index.js'
 import userMgr from "@/server/userUtil.js";
 export default {
@@ -47,6 +48,7 @@ export default {
       plugins:[],
       nowCliack:"",
       config:{},
+      pluginArr:[]
     };
   },
   props: {},
@@ -69,15 +71,24 @@ export default {
                   }
     // this.title = this.$route.query.new;
       //插件列表
-      serverApp.getPlugins(parmes).then(res=>{
-        res.data.list.forEach(e=>{
-          if(e.classify.id == 8){
-            this.plugins.push(e)
-          }
+      // serverApp.getPlugins(parmes).then(res=>{
+      //   console.log(res,"serverApp")
+      //   res.data.list.forEach(e=>{
+      //     if(e.classify.id == 8){
+      //       this.plugins.push(e)
+      //     }
+      //   })
+      //   // this.plugins = res.data.list;
+      //   // this.plugins = res.list;
+      // });
+
+      pluginServer.query({type:3}).then(res=>{
+        console.log(res,'pluginServer');
+        this.plugins = res.list.map(el=>{
+          if(!el.name) el.name = el.id;
+          return el;
         })
-        // this.plugins = res.data.list;
-        // this.plugins = res.list;
-      });
+      })
 
     
     let id = this.$route.query.new;
@@ -86,6 +97,9 @@ export default {
     if(session){
       console.log("本地")
       this.config = JSON.parse(session);
+      this.config.plugins.forEach(e=>{
+              this.pluginArr.push(e)
+        })
       console.log(this.config)
     }else{
       // serverApp.getAppById(id).then(res=>{
@@ -100,8 +114,12 @@ export default {
           arr.forEach(e => {
             if(e.id == id){
               e.plugins = e.plugins || [];
-              // console.log(e,451212)
+              console.log(e,451212)
               this.config = e
+              this.config.plugins.forEach(e=>{
+                this.pluginArr.push(e)
+              })
+              console.log(this.pluginArr)
             }
           });
         }
@@ -116,6 +134,10 @@ export default {
     sessionStorage.removeItem(_id);
   },
   methods: {
+    backPlugin(){
+      this.centerDialogVisible = false
+      this.config.plugins = this.pluginArr
+    },
     checked(){
       let id = this.$route.query.new;
       let session = sessionStorage.getItem(id);
@@ -165,7 +187,14 @@ export default {
       }
     },
     savePlguin(){
-      console.log(this.config)
+      console.log(this.config);
+      let obj = {};
+      Object.assign(obj,this.config);
+      obj.plugins =  obj.plugins.map(el=>{
+        el.name = el.id;
+        el.id = '';
+        return el
+      })
       serverApp.saveApp(this.config).then(res=>{
         // console.log(res);
         if(res.status==200){
@@ -192,8 +221,7 @@ export default {
 .detail{
   background-color: #f8f8f8;
   .leader{
-    // margin-top: 1.55rem;
-    padding: 1.023rem;
+    height: 4rem;
     &>b{
       float: left;
       font-size: 1.7689rem;

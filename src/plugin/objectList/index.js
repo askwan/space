@@ -7,6 +7,7 @@ let plugin = new PluginBase({
   title:'pull',
   icon:'el-icon-time',
   toolbar:true,
+  type:3,
   options:[{
     fn(){
       console.log('setting')

@@ -1,6 +1,6 @@
 class echart{
     constructor(){
-        this.map = "123"
+        this.map = ""
     }
     discount_chart(ids,echarts){
         var myChart = echarts.init(document.getElementById(ids));
@@ -20,7 +20,7 @@ class echart{
                 data:['2015 降水量', '2016 降水量']
             },
             grid: {
-                top: 70,
+                top: 60,
                 bottom: 50
             },
             xAxis: [
@@ -121,7 +121,7 @@ class echart{
             },
         },
             yAxis: {gridIndex: 0},
-            grid: {top: '55%'},
+            grid: {top: '65%',bottom: 30},
             series: [
                 {type: 'line', smooth: true, seriesLayoutBy: 'row'},
                 {type: 'line', smooth: true, seriesLayoutBy: 'row'},
@@ -131,7 +131,7 @@ class echart{
                     type: 'pie',
                     id: 'pie',
                     radius: '30%',
-                    center: ['50%', '25%'],
+                    center: ['50%', '42%'],
                     label: {
                         formatter: '{b}: {@2012} ({d}%)'
                     },

@@ -12,6 +12,8 @@ export default {
   },
   mounted() {
     this.init();
+    console.log(_bus)
+      console.log(this.sdomain,'sdomain')
   },
   methods:{
     async init(){

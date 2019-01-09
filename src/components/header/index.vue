@@ -1,6 +1,6 @@
 <template>
   <div class='nav-box fill flex-between pd-left-small pd-right-small'>
-    <div class="nav-left nav-box">
+    <div class="nav-left nav-box" @click="pathTo('/home')">
       space
     </div>
     <div class="nav-right flex" >
@@ -18,7 +18,7 @@
   export default {
     data(){
       return {
-        lists:[{name:'管理',id:1},{name:'退出',id:2}],
+        lists:[{name:'插件市场',id:1},{name:'退出',id:2}],
         urls:[{name:'BlueThink',url:'http://bluethink.cn/#/'},{name:'OneGis',url:'http://www.onegis.org'}],
         userInfo: {},
         isUser: false,
@@ -59,8 +59,11 @@
       },
       operate(item){
         if(item.id===1){
-          this.$router.push('/manager')
+          this.$router.push('/market')
         }
+      },
+      pathTo(path){
+        this.$router.push(path);
       }
     }
   }

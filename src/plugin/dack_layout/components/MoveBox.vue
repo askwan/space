@@ -9,9 +9,9 @@
           <i class="el-icon-close" @click="closeTab"></i>
         </div>
 
-        <div v-if="status.show && status.left==0 && commonality.leftData.length!=0" class="box-title box-title-left" :style="{top:status.titleNum+'px',right:-52+'px' }" :class="{'box-title-click':commonality.leftDataIndex==name}" @mousedown.prevent.stop="beginMoves"><i :class=icon></i><div >{{title}}</div></div>
+        <div v-if="status.show && status.left==0 && commonality.leftData.length!=0" class="box-title box-title-left pd-top-small" :style="{top:status.titleNum+'px',right:-52+'px' }" :class="{'box-title-click':commonality.leftDataIndex==name}" @mousedown.prevent.stop="beginMoves"><i :class=icon></i><div >{{title}}</div></div>
 
-        <div v-if="status.show && bodyWidth-status.left-status.width==0 && commonality.rightData.length!=0" class="box-title box-title-right" :style="{top:status.titleNum+'px',left:-52+'px' }"  :class="{'box-title-click':commonality.rightDataIndex==name}" @mousedown.prevent.stop="beginMoves"><i :class=icon></i><div >{{title}}</div></div>
+        <div v-if="status.show && bodyWidth-status.left-status.width==0 && commonality.rightData.length!=0" class="box-title box-title-right pd-top-small" :style="{top:status.titleNum+'px',left:-52+'px' }"  :class="{'box-title-click':commonality.rightDataIndex==name}" @mousedown.prevent.stop="beginMoves"><i :class=icon></i><div >{{title}}</div></div>
 
         <div class="box-content" :style="{height:(status.height-35)+'px'}" @scroll="boxScroll">
           <slot></slot>
@@ -294,9 +294,9 @@ export default {
     // padding-right: 5px;
     text-align: center;
     transition: all linear 0.2s;
+    padding-top:10px;
     &>div{
-
-    font-size: 12px;
+      font-size: 12px;
     }
   }
   .box-title-left {
@@ -306,12 +306,13 @@ export default {
   .box-title-right {
     border-bottom-left-radius: 3px;
     border-top-left-radius: 3px;
+
   }
   .box-title-click {
     transform: scale(1.05);
     color: #fff;
     // background-color: #409eff;
-    background-color:#3778bb
+    background-color:#3778bb;
   }
   .box-content {
     overflow-x: auto;

@@ -33,6 +33,7 @@ var router = new Router({
       path: '/create',
       name: 'create',
       component:()=>import('./views/page/create'),
+     
     },
     {
       path: '/detail',
@@ -46,13 +47,21 @@ var router = new Router({
     {
       path:'/view',
       component:()=>import('./views/page/view'),
+      meta:{
+        title:"预览"
+      }
     },
     //token页面
     {
       path: '/token',
       component:()=>import('./server/Token.vue'),
     },
+    {
+      path:'/market',
+      component:()=>import('./views/page/Market.vue')
+    }
   ]
 })
+
 
 export default router

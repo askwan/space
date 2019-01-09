@@ -1,7 +1,8 @@
 <template>
     <div class="create">
-    <div class="leader">
+    <div class="leader cle">
         <b><b v-if="urlParams">编辑</b><b v-else>创建</b>App</b>
+        <a href="" class="back">我的 App</a>
     </div>
     <!-- form -->
     <div class="create-tabs">
@@ -20,12 +21,12 @@
             </el-form-item> -->
             <el-form-item label="选择ui">
                 <el-select v-model="formLabelAlign.ui" placeholder="请选择" class="selected">
-                    <el-option v-for="item in uis" :key="item.id" :label="item.name" :value="item.name"></el-option>
+                    <el-option v-for="item in uis" :key="item.id" :label="item.name||item.id" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="选择场景">
                 <el-select v-model="formLabelAlign.view" placeholder="请选择" class="selected">
-                    <el-option v-for="item in views" :key="item.id" :label="item.name" :value="item.name"></el-option>
+                    <el-option v-for="item in views" :key="item.id" :label="item.name||item.id" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="选择时空域">
@@ -45,9 +46,10 @@
     </div>
 </template>
 <script>
-import server from '@/server.js'
+// import server from '@/server.js'
 import {serverApp} from '@/server/index.js'
 import userMgr from "@/server/userUtil.js";
+import {readyServer,pluginServer} from '@/localServer'
 export default {
   data() {
     return {
@@ -100,25 +102,27 @@ export default {
   watch:{},
   created() {},
   mounted() {
-      let p1 = server.getViews();
-      let p2 = server.getUis();
-      Promise.all([p1,p2]).then(lists=>{
-          this.views = lists[0].list;
-          this.uis = lists[1].list;
-      })
 
       this.userId = userMgr.getUser()
-      console.log(this.userId.id)
-      //请求时空域
+    //   console.log(this.userId.id)
+    //   //请求时空域
       let params = {
-          uid:this.userId.id,
-          pageNum:1,
-          pageSize:2
+          uid:this.userId.id
       }
       serverApp.getDomain(params).then(res=>{
           if(res.status == 200){
+              console.log(res.data,"sdomin")
               this.sDomian = res.data.list
           }
+      });
+
+      let p1 = pluginServer.query({type:1});
+      let p2 = pluginServer.query({type:2});
+
+      Promise.all([p1,p2]).then(list=>{
+          console.log(list)
+          this.uis = list[0].list;
+          this.views = list[1].list;
       })
 
       //判断地址栏id
@@ -250,6 +254,14 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+.cle:after {
+  content: " ";
+  display: block;
+  width: 100%;
+  height: 0px;
+  overflow: hidden;
+  clear: both;
+}
 .create{
     width: 1200px;
     margin: 0 auto;
@@ -259,11 +271,21 @@ export default {
     // margin-top: 1.55rem;
     padding: 1.023rem;
     b{
+      float: left;
       font-size: 1.7689rem;
       color: #4c4c4c;
       font-weight: 600;
     }
     border-bottom: 1px solid #ccc;
+    .back{
+      float: left;
+      margin: 10px 20px;
+      font-size: 12px;
+      color: #4c4c4c;
+      &:hover{
+        text-decoration: underline;
+      }
+    }
   }
   .create-tabs{
       width:80%;

@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-  import {pluginServe} from '@/server'
+  // import {pluginServe} from '@/server'
   export default {
     data(){
       return {

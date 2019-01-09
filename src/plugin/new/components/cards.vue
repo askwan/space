@@ -1,6 +1,6 @@
 <template>
   <div class="cards">
-    <el-card class="box-card">
+    <el-card class="box-card ">
       <div slot="header" class="clearfix">
         <span>{{title}}</span>
         <el-button style="float: right; padding: 3px 0" type="text">{{num}}</el-button>
@@ -41,14 +41,11 @@ export default {
 </script>
 <style lang='scss' scoped>
 .cards {
-  height: 100%;  
   .box-card {
-    height: 100%;  
     // background-color: rgba(47, 53, 60, 0.8);
     background-color: transparent;
     color: #eee;
     .content {
-      height: 100%;  
       width: 100%;
       color: #eee;
     }

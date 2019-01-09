@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div class="viewMap" v-wechat-title="$route.meta.title">
         <div class="detail fill">
         <!-- <div class="leader cle">
             <b>{{config.name}}</b>
         </div> -->
         <!-- content -->
-        <div class="app-box">
+        <div class="fill">
             <app-frame :config="config"></app-frame>
         </div>
         </div>
@@ -41,6 +41,7 @@ export default {
               e.plugins = e.plugins || [];
               // console.log(e,451212)
               this.config = e
+              this.$route.meta.title = e.name
             }
           });
         }
@@ -72,7 +73,7 @@ export default {
     border-bottom: 1px solid #ccc;
   }
   .app-box{
-    height: calc(100% - 4rem);
+    // height: calc(100% - 4rem);
     position: relative;
     width: 100%;
     // top: -50px;

@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-  import {pluginServe} from '@/server'
+  // import {pluginServe} from '@/server'
   export default {
     data(){
       return {
@@ -22,9 +22,9 @@
       getPlugin(){
         let path = this.$route.fullPath;
         let typeId = 1;
-        pluginServe.getPlugins({typeId}).then(res=>{
-          console.log(res.data);
-        })
+        // pluginServe.getPlugins({typeId}).then(res=>{
+        //   console.log(res.data);
+        // })
       }
     }
   }

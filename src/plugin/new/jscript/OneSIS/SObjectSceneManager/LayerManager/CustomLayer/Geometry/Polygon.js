@@ -8,14 +8,18 @@ class Polygon extends publicFun {
 
   create(lonlat, sobject, node, pick) {
     let floorObj = new THREE.Object3D();
-
+    floorObj.name = sobject.name
+    floorObj.sobject = sobject
     let obj = this.getDataObj(lonlat, sobject, node)
+if(sobject.name=='-1楼'){
+console.log(obj)
+}
     let color = this.getColors(sobject.data)
-
     let shape = new THREE.Shape(obj.lonlatArr);
+
     let extrudeSettings = {
       steps: 1,
-      depth: obj.height,
+      depth: obj.selfHeight,
       bevelEnabled: false,
       bevelThickness: 0,
       bevelSize: 0,
@@ -28,35 +32,33 @@ class Polygon extends publicFun {
       vColor = new THREE.Color().setHex(pick)
       material = new THREE.MeshPhongMaterial({
         color: vColor,
-        shininess: 30,
-  
       });
-      // material.transparent = obj.transparent
-      // material.opacity = color.opacity
     } else {
       material = new THREE.MeshPhongMaterial({
         color: vColor,
-        shininess: 30,
-  
+        shadowSide: THREE.DoubleSide,
+        // wireframe: true
       });
       material.transparent = obj.transparent
       material.opacity = color.opacity
     }
-   
 
     let mesh = new THREE.Mesh(geometry, material);
     floorObj.add(mesh);
 
-    //边线
-    let edges = new THREE.EdgesGeometry(geometry);
-    let line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
-      color: 0xffffff
-    }));
-    floorObj.add(line);
-    floorObj.position.z += obj.topLength
+    if (obj.haveLine) {
+      //边线
+      let edges = new THREE.EdgesGeometry(geometry);
+      let line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({
+        color: 0xffffff
+      }));
+      floorObj.add(line);
+    }
+
+    floorObj.position.z += Number(obj.minHeight)
 
     return floorObj
   }
- 
+
 }
 export default Polygon

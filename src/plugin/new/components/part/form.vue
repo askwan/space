@@ -68,7 +68,7 @@ export default {
         list:[],
         array:[],
         style:[],
-
+        // activeNames: ['1'],
         getNum:GlobalData,
     };
   },
@@ -94,7 +94,7 @@ export default {
       this.getData()
     },
     "getNum.formDict"(){
-      this.array = this.getNum.formDict.data
+      this.array = this.getNum.formDict
     }
   },
   created() {},
@@ -103,8 +103,8 @@ export default {
       // getVal.getDict().then(res=>{
       //       this.array = res
       //   })
-       this.array = this.getNum.formDict.data
-       console.log(this.array,105)
+       this.array = this.getNum.formDict
+      //  console.log(this.array,105)
   },
   methods: {
     getData() {

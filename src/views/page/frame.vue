@@ -1,6 +1,6 @@
 <template>
   <div class='frame-box fill'>
-    <component :is="comp" :plugins="plugins" :view="mainView"></component>
+    <component :is="comp" :plugins="plugins" :view="mainView" :sdomain="sdomain"></component>
   </div>
 </template>
 <script>
@@ -11,7 +11,8 @@
         compList:[],
         comp:'',
         mainView:'',
-        plugins:[]
+        plugins:[],
+        sdomain:{}
       }
     },
     props:['config'],
@@ -39,9 +40,10 @@
         if(!this.config.layout) return
         import ('@/plugin/'+this.config.layout+'/index.vue').then(res=>{
           this.comp = Vue.component(this.config.layout,res.default);
+          this.sdomain = this.config.sdomain;
         });
         if(this.config.plugins){
-          this.plugins = this.config.plugins.map(el=>el.name);
+          this.plugins = this.config.plugins.map(el=>el.name||el.id);
         }
         this.mainView = this.config.mapView;
       }
@@ -51,5 +53,7 @@
   }
 </script>
 <style lang='scss' scoped>
-
+  .frame-box{
+    overflow:hidden;
+  }
 </style>

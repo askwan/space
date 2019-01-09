@@ -95,7 +95,6 @@ export default {
       }
       })
      
-    //   console.log(otypes)
     //   console.log(globalData.showTreeArr)
     }
   }

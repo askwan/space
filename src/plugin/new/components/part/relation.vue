@@ -46,7 +46,6 @@
 // import getVal from "../psde/getData.js";
 
 import GlobalData from "../../jscript/GlobalData.js";
-console.log(GlobalData,22222222)
 export default {
   data() {
     return {

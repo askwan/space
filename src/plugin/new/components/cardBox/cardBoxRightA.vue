@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <cards  :title="title" :num="num">
+    <div class="detailCard height-100">
+        <cards  :title="title" class="height-100">
             <!-- <cardSlot :content="list"></cardSlot> -->
             <!-- <cardSlot></cardSlot> -->
             <detail></detail>
@@ -9,12 +9,11 @@
 </template>
 <script>
 import GlobalData from "../../jscript/GlobalData.js";
-console.log(GlobalData,432432)
+// console.log(GlobalData,432432)
 export default {
   data() {
     return {
-        title:"中心机房",
-        num:3,
+        title:"详情",
         // state:"开启",
 
         objChange:{}
@@ -28,7 +27,7 @@ export default {
   computed: {},
   watch:{
         objChange(){
-            console.log("change")
+            // console.log("change")
         }
 
   },

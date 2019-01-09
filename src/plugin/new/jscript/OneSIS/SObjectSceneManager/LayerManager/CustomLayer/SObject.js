@@ -10,6 +10,9 @@ class SObject {
 
     this.forms = '' //forms集合
     this.nodes = {} //坐标和种类【点线面】way area node relation
+
+    this.oldLonLatArr={}
+
     this.lonlat = '' //中心坐标
 
     this.layer = 'otherLayer' //在哪个图层
@@ -33,7 +36,7 @@ class SObject {
     this.lonlat = [(this.data.geoBox.maxx + this.data.geoBox.minx) / 2, (this.data.geoBox.maxy + this.data.geoBox.miny) / 2]
     this.setNodes()
     this.setIsFloor()
-    this.setLayer()
+    // this.setLayer()
   }
 
   setLayer() {
@@ -96,11 +99,37 @@ class SObject {
         this.nodes[form.id].type = 'line'
       } else if (type == 23) {
         this.nodes[form.id].type = 'polygon'
+      } else if (type == 24) {
+        this.nodes[form.id].type = 'multiPolygon'
       } else if (type == 50) {
         this.layer = 'modelLayer'
         this.nodes[form.id].type = 'model'
       }
-      if (form.geom.nodes) {
+      if (form.geom.members) {
+        this.nodes[form.id].type = 'multiPolygon'
+        this.nodes[form.id].nodes = {}
+        this.nodes[form.id].nodes.outer = []
+        this.nodes[form.id].nodes.inner = []
+        for (let q = 0; q < form.geom.members.length; q++) {
+          let members = form.geom.members[q]
+          if (members.role == "outer") {
+            this.nodes[form.id].nodes.outer.push([])
+            let l = this.nodes[form.id].nodes.outer.length - 1
+            for (let e = 0; e < members.refEntity.nodes.length; e++) {
+              let r = members.refEntity.nodes[e]
+              this.nodes[form.id].nodes.outer[l].push([r.x, r.y, r.z])
+            }
+          }
+          if (members.role == "inner") {
+            this.nodes[form.id].nodes.inner.push([])
+            let l = this.nodes[form.id].nodes.inner.length - 1
+            for (let e = 0; e < members.refEntity.nodes.length; e++) {
+              let r = members.refEntity.nodes[e]
+              this.nodes[form.id].nodes.inner[l].push([r.x, r.y, r.z])
+            }
+          }
+        }
+      } else if (form.geom.nodes) {
         for (let q = 0; q < form.geom.nodes.length; q++) {
           let n = form.geom.nodes[q]
           this.nodes[form.id].nodes.push([n.x, n.y, n.z])

@@ -1,61 +1,36 @@
 <template>
-    <div>
-      
-        <cards :title="title" :num="num">
-            <div id="main-top" style="width: 316px;height:240px;backgroundColor: #fff"></div>
-
+    <div class="leftA height-100">
+        <cards :title="title" class="height-100">
+            <!-- <cardSlot :content="home"></cardSlot> -->
+            <history></history>
         </cards>
-        <cards :title="title" :num="num">
-           <div id="main-center" style="width:316px;height:240px;backgroundColor: #fff"></div>
-        </cards>
-        <!-- <cards :title="title" :num="num">
-            <div id="main" style="width: 200px;height:200px;"></div>
-        </cards> -->
-
-
-
+        
     </div>
 </template>
 <script>
-import chart from '../../jscript/echartData/data.js'
 export default {
   data() {
     return {
-      title: "图表",
-      num: 3
+        title:"历史面板",
+        state:"开启",
+
+        home:"home",
+        center:"center",
+        bottom:"bottom"
     };
   },
   props: {},
   components: {
-    cards: () => import("../cards.vue"),
-    COperation: () => import("../upWindow/operation.vue")
+      cards:()=>import('../cards.vue'),
+      //   cardSlot:()=>import('../cardSlot.vue')
+      history:()=>import('../upWindow/versionHistory.vue'),
   },
   computed: {},
   watch:{},
   created() {},
-  mounted() {
-
-      requirejs(
-          [
-            "/js/echarts.js"
-          ],
-          (echarts) => {
-            console.log(123123,echarts)
-            chart.discount_chart("main-top",echarts)
-            chart.dot_plot("main-center",echarts)
-          }
-        );
-    //  chart.discount_chart("main")
-  },
-  methods: {
-
-  }
+  mounted() {},
+  methods: {}
 };
 </script>
 <style lang='scss' scoped>
-#main-top-tip{
-  position: absolute;
-  top: 20px;
-  right: 30px;
-}
 </style>
