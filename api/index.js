@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 // const loadSource = require('./load_source.js')
 const queryApi = require('./query.js')
 const downloadApi = require('./download.js')
+const deleteApi = require('./delete.js')
 module.exports = function(app,server){
   app.use(bodyParser.json());
   let urlencodeParser = bodyParser.urlencoded({extended:false});
@@ -13,4 +14,5 @@ module.exports = function(app,server){
   // loadSource(app);
   app.get('/api/query',queryApi);
   app.get('/api/download',downloadApi);
+  app.get('/api/delete',deleteApi);
 }

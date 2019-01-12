@@ -1,51 +1,129 @@
-// import psde from '../../../psde'
-// import store from '@/store'
-// import {
-//   MutationsList
-// } from '@/store/EventList'
-// import map from '@/script/map.js'
-// import TimeLineBox from '@/Cesium/Widgets/TimeLineBox'
+import axios from "axios";
+import map from '../../cesiumMap/map'
 
-// import globalData from '@/script/datastore/globalData/GlobalData'
+import GlobalData from '../../GlobalData'
+import SObjectTile from '../manageData/SObjectTile'
 
-// import {
-//   versionListQuery
-// } from '../../../psde/objectService'
-// import Version from '../manageData/Version'
-// import {
-//   CesiumEventBus,
-//   CesiumEvent
-// } from '../cesiumEvent/Event'
+import Sobject from '../Sobject'
 
+
+// const psdeHost = "http://bt1.geosts.ac.cn/api/dae/datastore";
+// const psdeUrl = psdeHost + "/rest/v0.1.0/datastore/";
+
+const psdeUrl = "http://192.168.1.133:8001/rest/v0.1.0/datastore";
 /**
 历史数据集
  */
 class HistoryDataStroe {
   constructor() {
-    this.versionAll = {}
+    this.SObjectAll = {}
+    this.sobjectData = []
+
+
+    this.start = false
     //所有版本
     this.versionList = []
 
-    this.nowVersionList = []
-
-
-
-    // 当前视口显示的切片
-    this.tiles = []
-    //上一个版本时间
-    this.beforeTime = 0
-
-    // this.nowVersion = null
-    this.monitor()
-
   }
-  monitor() {
-    CesiumEventBus.on(CesiumEvent.MoveEnd, data => {
-      if (globalData.historyOpen) {
-        return
+  loadHistory(start, end, n) { //版本 开
+    console.log('版本开', 666666666)
+    this.start = false
+    GlobalData.historyOpen = true
+    GlobalData.queryReady = false;
+    GlobalData.timelineShow = false
+
+    map.clock.clock.startTime = Cesium.JulianDate.fromDate(new Date(start)).clone();
+    map.clock.clock.currentTime = Cesium.JulianDate.fromDate(new Date(start)).clone();
+    map.clock.clock.stopTime = Cesium.JulianDate.fromDate(new Date(end)).clone();
+    map.viewer.scene.render();
+    GlobalData.timelineShow = true
+    // TimeLineBox.init(map.viewer, 'time-line') // 加载时间轴
+    // TimeLineBox.enable();
+    // TimeLineBox.disabled();
+    let ob = {
+      beginTime: this.JulianDateChange(map.clock.clock.startTime),
+      endTime: this.JulianDateChange(map.clock.clock.stopTime),
+      sdomains: GlobalData.sdomains,
+      pageNum: 1,
+      pageSize: 1000000
+    }
+    let url = psdeUrl + '/version/list/query'
+    axios
+      .get(url, {
+        params: ob
+      })
+      .then(response => {
+        console.log(response.data.data);
+        this.versionList = this.bubbleSort(response.data.data.list)
+        let idList = ''
+        for (let i = 0; i < this.versionList.length; i++) {
+          let v = this.versionList[i]
+          if (i == 0) {
+            idList += v
+          } else {
+            idList += ',' + v
+          }
+        }
+        this.getData(idList)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+  getData(version) {
+    let url = psdeUrl + "/object/query";
+
+    let obj = {
+      loadAttr: true, // 是否加载属性信息
+      loadForm: true, // 是否加载形态数据
+      loadNetwork: true, // 是否加载关系
+      loadModel: true, // 是否加载模型
+      loadObjType: true,
+      // loadAction: true, // 是否载入操作集合
+      loadChildren: true,
+      loadVersion: true,
+
+      versions: version,
+      sdomains: GlobalData.sdomains,
+      uids: ""
+    };
+    axios
+      .get(url, {
+        params: obj
+      })
+      .then(response => {
+        console.log(response.data.data);
+        if (response.data.status == 200) {
+          this.sobjectData = []
+
+          for (let i = 0; i < response.data.data.list.length; i++) {
+            let sobj = response.data.data.list[i];
+            this.sobjectData.push(new Sobject(sobj));
+          }
+          this.SObjectAll = new SObjectTile(this.sobjectData)
+          this.start = true
+          GlobalData.queryReady = true;
+       
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  //冒泡
+  vidSort(arr) {
+    let len = arr.length;
+    for (let i = 0; i < len; i++) {
+      for (let j = 0; j < len - 1 - i; j++) {
+        if (arr[j].version.vid > arr[j + 1].version.vid) { //相邻元素两两对比
+          let temp = arr[j + 1]; //元素交换
+          arr[j + 1] = arr[j];
+          arr[j] = temp;
+        }
       }
-      this.tiles = data.arr
-    })
+    }
+    return arr;
   }
   getTimes() {
     //时间轴当前时间
@@ -62,233 +140,15 @@ class HistoryDataStroe {
     }
     return time
   }
-  createFirstVersion(time) {
-    if (this.versionList.length > 0) {
-      let n = this.versionList[0]
-      let nextTime = this.versionList[1] ? this.versionList[1].vid * 1000 : time.stopTime
-      if (!this.versionAll[n.vid]) {
-        this.versionAll[n.vid] = new Version(n, this.tiles, nextTime)
-        this.nowVersionList.push(n.vid)
-        console.log('加载第一个版本', n.vid, this.DateChange(n.vid * 1000))
-      }
-    }
-  }
-  createNewVersion(n, nextTime) {
-    //当前版本是否有
-    if (!this.versionAll[n.vid]) {
-      this.versionAll[n.vid] = new Version(n, this.tiles, nextTime)
-      console.log(n.vid, '走一个当前----------------------------------')
-    }
-    return this.versionAll[n.vid]
-  }
-  createNextVersion(nextVersion, time) {
-    //下一版本
-    if (nextVersion.now && !this.versionAll[nextVersion.now.vid]) {
-      console.log('---------------------------------------------')
-      console.log('加载下一个版本', nextVersion.now.vid)
-      let nextTimes = nextVersion.next ? nextVersion.next.vid * 1000 : time.stopTime
-      this.versionAll[nextVersion.now.vid] = new Version(nextVersion.now, this.tiles, nextTimes)
-    }
-  }
-  nextVersion(nowVersion, multiplier) {
-    for (let i = 0; i < this.versionList.length; i++) {
-      let n = this.versionList[i]
-      if (n.vid > nowVersion.vid + multiplier) {
-        let obj = {
-          now: n,
-          next: this.versionList[i + 1] ? this.versionList[i + 1] : null
-        }
-        return obj
-      }
-    }
 
-    return null
-  }
-  getNowVersion() {
-    let now = null
-    let version = null
-    this.nowVersionList.forEach((n, i, arr) => {
-      if (time.nowTime >= n.vid * 1000) {
-        let num = time.nowTime - n.vid * 1000
-        if (!now) {
-          now = num
-        } else {
-          if (now - num > 0) {
-            now = num
-          }
-          now = now
-
-        }
-        return n
-      }
-    })
-  }
-  //筛选版本
-  // filtrateList() {
-  //   let version = null
-  //   let nextVersion = null
-  //   let multiplier = map.clock.clock._multiplier
-
-  //   //处理时间
-  //   let time = this.getTimes()
-  //   this.createFirstVersion(time)
-  //   this.versionList.forEach((n, i, arr) => {
-  //     // let nextTime = arr[i+1] ? arr[i+1].vid * 1000 : time.stopTime
-
-  //     if (time.nowTime >= n.vid * 1000) {
-  //       this.setNowVersion(n.vid)
-  //       version = this.createNewVersion(n.vid)
-  //       nextVersion = this.nextVersion(n, multiplier)
-  //       console.log(nextVersion.now.vid, nextVersion.next.vid)
-
-  //       // if (nextVersion) {
-  //       //   this.createNextVersion(nextVersion, time)
-  //       // }
-  //       return
-  //     }
-  //   })
-
-  //   this.nowVersionList.forEach((n, i, arr) => {
-  //     if (time.nowTime >= n.vid * 1000) {
-  //       return n
-  //     }
-  //   })
-  //   return version
-
-
-  //   let arr = []
-  //   let atime = 0
-  //   list.forEach((n, i) => {
-  //     if (i == 0) {
-  //       atime = n.vid
-  //       arr.push(n)
-  //     } else {
-  //       // if (n.vtime - atime >= multiplier * 5 * 1000) {
-  //       if (n.vid - atime >= multiplier * 5) {
-  //         atime = n.vid
-
-  //         arr.push(n)
-  //       }
-  //     }
-  //   })
-  //   return arr
-
-  // }
-  // update(frameState) {
-  //   if (!globalData.historyOpen) {
-  //     return
-  //   }
-
-  //   // //当前时间轴快进倍数
-  //   // let version = this.filtrateList()
-  //   // if (version) {
-  //   //   version.update(frameState)
-
-  //   // }
-  //   // return
-  //   //加载第一个版本
-  //   this.createFirstVersion()
-  //   versionList.forEach((n, i, arr) => {
-  //     let next = arr[i + 1]
-  //     let nexts = arr[i + 2]
-  //     let nextTime = next ? next.vid * 1000 : time.stopTime
-  //     //在时间轴内 开始播放
-  //     if (time.nowTime >= n.vid * 1000 && time.nowTime < nextTime) {
-  //       this.createNewVersion(n, nextTime)
-  //       this.setNowVersion(n.vid)
-  //       this.createNextVersion(next, time, nexts)
-  //       this.versionAll[n.vid].update(frameState)
-  //     }
-  //   })
-  // }
 
   update(frameState) {
-    if (!globalData.historyOpen) {
-      return
+    if (GlobalData.historyOpen && this.start && this.sobjectData && this.SObjectAll != {}) {
+      this.SObjectAll.update(frameState)
     }
-    // 对场景内的切片进行调度
-    // this.dispatchTile(frameState)
-    //时间轴当前时间
-    let nowTime = new Date(Cesium.JulianDate.toDate(map.clock.clock.currentTime)).getTime()
-    //时间轴起始时间
-    let startTime = new Date(Cesium.JulianDate.toDate(map.clock.clock.startTime)).getTime()
-    //时间轴结束时间
-    let stopTime = new Date(Cesium.JulianDate.toDate(map.clock.clock.stopTime)).getTime()
-    //当前时间轴快进倍数
-    // let multiplier = map.clock.clock._multiplier
-    let multiplier = 60
-    map.clock.clock._multiplier = multiplier
-    if (this.versionList.length > 0) {
-      let n = this.versionList[0]
-      let nextTime = this.versionList[1] ? this.versionList[1].vid * 1000 : stopTime
-
-      if (!this.versionAll[n.vid]) {
-        this.versionAll[n.vid] = new Version(n, this.tiles, nextTime)
-        console.log('加载第一个版本', this.DateChange(n.vid))
-      }
-    }
-    let versionList = this.filtrateList(this.versionList, multiplier)
-    //console.log(versionList)
-    versionList.forEach((n, i, arr) => {
-      // this.versionList.forEach((n, i, arr) => {
-      let next = arr[i + 1]
-      let nexts = arr[i + 2]
-      let nextTime = next ? next.vid * 1000 : stopTime
-      //在时间轴内 开始播放
-      if (nowTime >= n.vid * 1000 && nowTime < nextTime) {
-        //当前版本是否有
-        if (!this.versionAll[n.vid]) {
-          this.versionAll[n.vid] = new Version(n, this.tiles, nextTime)
-          console.log('走一个当前')
-        }
-        this.setNowVersion(n.vid)
-        // console.log(n.vid)
-        this.versionAll[n.vid].update(frameState)
-        // this.nowVersion = null
-        // this.nowVersion = this.versionAll[n.vid]
-        //下一版本
-        if (next && !this.versionAll[next.vid]) {
-          console.log('---------------------------------------------')
-          console.log('加载下一个版本')
-          let nextTimes = nexts ? nexts.vid * 1000 : stopTime
-
-          this.versionAll[next.vid] = new Version(next, this.tiles, nextTimes)
-        }
-
-      } else {
-
-      }
-
-    })
 
   }
-  getUpdateVersion(versionList) {
-    return null;
-  }
-
-  setNowVersion(val) {
-    globalData.versionId = val
-  }
-  //筛选版本
-  filtrateList(list, multiplier) {
-    // let versionList=this.bubbleSort(list)
-    let arr = []
-    let atime = 0
-    list.forEach((n, i) => {
-      if (i == 0) {
-        atime = n.vid
-        arr.push(n)
-      } else {
-        if (n.vid - atime >= multiplier * 1) {
-          atime = n.vid
-
-          arr.push(n)
-        }
-      }
-    })
-    return arr
-
-  }
+ 
   //冒泡
   bubbleSort(arr) {
     let len = arr.length;
@@ -303,36 +163,7 @@ class HistoryDataStroe {
     }
     return arr;
   }
-  loadHistory(start, end, n) { //版本 开
-    console.log('版本开', 666666666)
 
-    globalData.historyOpen = true
-
-    map.clock.clock.startTime = Cesium.JulianDate.fromDate(new Date(start)).clone();
-    map.clock.clock.currentTime = Cesium.JulianDate.fromDate(new Date(start)).clone();
-    map.clock.clock.stopTime = Cesium.JulianDate.fromDate(new Date(end)).clone();
-    map.viewer.scene.render();
-
-    TimeLineBox.init(map.viewer, 'time-line') // 加载时间轴
-    store.commit(MutationsList.openTab, {
-      name: 'timeLineUi'
-    });
-    TimeLineBox.enable();
-    // TimeLineBox.disabled();
-
-    let ob = {
-      beginTime: this.JulianDateChange(map.clock.clock.startTime),
-      endTime: this.JulianDateChange(map.clock.clock.stopTime),
-      pageNum: 1,
-      pageSize: 1000
-    }
-
-    versionListQuery(ob).then(res => {
-
-      this.versionList = this.bubbleSort(res.list)
-      console.log(this.versionList)
-    })
-  }
 
   JulianDateChange(t) {
     let time = new Date(Cesium.JulianDate.toDate(t))

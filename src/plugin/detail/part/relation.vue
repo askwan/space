@@ -226,6 +226,7 @@ export default {
     div {
       display: inline-block;
       vertical-align: top;
+      margin-left: 3px;
       .right-relation-pull {
         position: relative;
         float: left;
@@ -249,6 +250,7 @@ export default {
           height: 1px;
           margin-right: 7px;
           background: #999999;
+          margin-top:26px;
         }
         > i {
           font-size: 8px;

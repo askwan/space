@@ -69,7 +69,6 @@ import toolBarData from "../../jscript/toolData/toolBarData";
 import cMeasurement from "./floating/measurement";
 import cSearch from "./floating/search";
 import globalData from "../../jscript/GlobalData";
-
 export default {
   data() {
     return {
@@ -130,7 +129,7 @@ export default {
 .tool-bar {
   position: absolute;
   top: 20px;
-  right: 50px;
+  right: 60px;
   color: #ffffff;
   height: 40px;
   line-height: 40px;
@@ -198,6 +197,7 @@ export default {
     }
   }
 }
+
 .pullDowns-leave-active {
   transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1) 1s;
 }

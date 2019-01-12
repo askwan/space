@@ -246,6 +246,7 @@ export default {
   position: absolute;
   outline: 1px solid #999999;
   user-select: none;
+  outline:none;
   .move-nav {
     width: 100%;
     height: 34px;

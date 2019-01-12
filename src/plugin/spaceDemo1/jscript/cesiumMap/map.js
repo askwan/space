@@ -7,19 +7,21 @@ import TheFirstPerspective from '../operation/theFirstPerspective'
 // import Follow from '../operation/follow'
 import Tool from '../tools/Tool'
 
-
-
+import mapDataStore from '../dataStore/control/MapDataStore' 
+import historyDataStroe from '../dataStore/control/HistoryDataStroe'
 class Map {
   constructor() {
     this.id = 'cesium'
 
-    this.behaviorLists={}//行为
+    this.behaviorLists = {} //行为
 
-    this.measurementPolyline={}//量算
-    this.measurementLabel={}//量算
+    this.measurementPolyline = {} //量算
+    this.measurementLabel = {} //量算
   }
-  init() {
+  init(fn) {
+    clock.init();
 
+    this.createCesiumView(fn)
   }
 
   createCesiumView(fn) { // 创建cesium视图
@@ -39,8 +41,8 @@ class Map {
       sceneModePicker: false, // 是否显示3D/2D选择器 
       baseLayerPicker: false, // 是否显示图层选择器 
 
-      // shadows: true, // 确定阴影是否由太阳投射。
-      // skyAtmosphere: true, //蓝天，以及地球四肢周围的辉光。设置为false关闭。
+      shadows: false, // 确定阴影是否由太阳投射。
+      skyAtmosphere: false, //蓝天，以及地球四肢周围的辉光。设置为false关闭。
       imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
         url: 'http://www.google.cn/maps/vt?lyrs=s@726&gl=cn&x={TileCol}&y={TileRow}&z={TileMatrix}',
         // url: 'http://192.168.1.102:3000/style/{TileMatrix}/{TileCol}/{TileRow}.png?id=tmstyle://e:/data/aa.tm2&j45ogek3',
@@ -59,7 +61,7 @@ class Map {
 
     this.viewer.extend(Cesium.viewerCesiumNavigationMixin, {}) // 陀螺仪插件 
     // TimeLineBox.init(this.viewer, 'time-line') // 加载时间轴
-    // scene.globe.enableLighting = true //地球接收来自太阳的光照产生阴影
+    this.viewer.scene.globe.enableLighting = false //地球接收来自太阳的光照产生阴影
     GlobalData.mapReady = true
 
     console.log('地图完毕')
@@ -71,16 +73,25 @@ class Map {
     this.measurementPolyline = new Cesium.PolylineCollection() //量算
     this.measurementLabel = new Cesium.LabelCollection() //量算
 
-    this.flyTo()
+    this.clockInit(); // 时钟初始化
+
+    // this.flyTo()
     this.newClass() //引class
     this.addPrimitive(fn) //添加primitive
 
   }
+  clockInit() {
+    this.clock = clock
+    // let eventHelper = new Cesium.EventHelper()
+    this.time = new Date(Cesium.JulianDate.toDate(clock.clock.currentTime))
+    // eventHelper.add(clock.clock.onTick, this._onTick, this)
+  }
   addPrimitive(fn) {
     let scene = this.viewer.scene
     //总数据
-    // scene.primitives.add(mapDataStore)
-    // scene.primitives.add(historyDataStroe)
+
+    scene.primitives.add(mapDataStore)
+    scene.primitives.add(historyDataStroe)
 
     //量算
 
@@ -116,20 +127,30 @@ class Map {
     // this.follow = new Follow() //相机跟随
     this.tool = new Tool() //工具综合
   }
-  flyTo() {
+  flyTo(data) {
+    console.log(data)
     //郑州
-    // this.viewer.camera.flyTo({
-    //   destination: Cesium.Cartesian3.fromDegrees(
-    //     113.836644, 34.550386, 15000
-    //   )
-    // });
-
-    //海
     this.viewer.camera.flyTo({
       destination: Cesium.Cartesian3.fromDegrees(
-        120.91558, 38.391155, 15000
+        (data.geoBox.maxy+data.geoBox.miny)/2, (data.geoBox.maxx+data.geoBox.minx)/2, 10000
       )
     });
+
+    //海
+    // this.viewer.camera.flyTo({
+    //   destination: Cesium.Rectangle.fromDegrees(
+        
+    //     data.geoBox.maxx,
+    //     data.geoBox.maxy,
+    //     data.geoBox.minx,
+    //     data.geoBox.miny,
+    //   )
+    // });
+    // this.viewer.camera.flyTo({
+    //   destination: Cesium.Cartesian3.fromDegrees(
+    //     120.904207,38.395575, 4500
+    //   )
+    // });
   }
   getGlobalDataCurrentSelectObject() {
     return GlobalData.currentSelectObject

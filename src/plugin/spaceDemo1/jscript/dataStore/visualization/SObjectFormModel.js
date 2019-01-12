@@ -16,7 +16,6 @@ class SObjectFormModel {
     this.uuid = this.sobject.uuid
     this.pitch = false
     this.nodeRelation = {}
-
     this.createGltf(this.form)
 
   }
@@ -50,7 +49,7 @@ class SObjectFormModel {
   createGltf(form) {
     if (form.type == 50 && form.formref.refid > 0) {
       this._primitive = this.createModel(form)
-      //this.animation()
+      this.animation()
       if (this._primitive) {
         this.color = this._primitive.color
       }
@@ -66,9 +65,14 @@ class SObjectFormModel {
     let hpRoll = new Cesium.HeadingPitchRoll()
     if (data.style) {
       style = JSON.parse(data.style)[0]
-      if (style.x && style.y && style.z) {
-        hpRoll = Cesium.HeadingPitchRoll.fromDegrees(style.x ? style.x : 0, style.y ? style.y : 0, style.z ? style.z : 0)
+      let s = {
+        x: style.x != "" ? style.x : 0,
+        y: style.y != "" ? style.y : 0,
+        z: style.z != "" ? style.z : 0
       }
+      // if (style.x && style.y && style.z) {
+      hpRoll = Cesium.HeadingPitchRoll.fromDegrees(180 - s.y, -s.x, s.z)
+      // }
     }
     let modelPos = null
     if (posi.type == "Polygon") {
@@ -87,8 +91,8 @@ class SObjectFormModel {
       return
     }
     let modelMatrix = Cesium.Transforms.headingPitchRollToFixedFrame(modelPos, hpRoll, Cesium.Ellipsoid.WGS84, Cesium.Transforms.localFrameToFixedFrameGenerator('north', 'west'))
-    let url = downloadFile.baseURL + '/' + data.formref.refid
-    // console.log(url,"模型地址")
+    let url = downloadFile + '/' + data.formref.refid
+    // console.log(downloadFile,url,"模型地址")
     let model = Cesium.Model.fromGltf({
       url: url,
       modelMatrix: modelMatrix,

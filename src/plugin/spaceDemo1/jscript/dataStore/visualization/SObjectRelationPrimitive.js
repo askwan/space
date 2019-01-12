@@ -14,10 +14,10 @@ class SObjectRelationPrimitive {
 
     // this.color = Cesium.Color.GOLD
 
-    this.show = false;
+    this.show = true;
     this.processingData(sobject)
   }
- 
+
   update(frameState) {
     if (this.polylineCollection) {
       for (let i = 0; i < this.polylineCollection._polylines.length; i++) {
@@ -36,7 +36,6 @@ class SObjectRelationPrimitive {
     this.show = val
   }
   getPosition(i) {
-    // console.log(this.sobject)
     let pt1 = this.sobject.getSobjectNowPosition()
     let pt2 = []
     let ronode = this.sobject.network.nodes[i]
@@ -116,7 +115,7 @@ class SObjectRelationPrimitive {
       if (pt2.length < 3) {
         pt2.push(0)
       }
-      
+
       let rrid = ronode.edge.relation.id
       let colors
       if (GlobalData.relationColor[rrid]) {
@@ -125,19 +124,19 @@ class SObjectRelationPrimitive {
         // let color = Cesium.Color.fromRandom({
         //   alpha: 1.0
         // });
-          let color = Cesium.Color.fromRandom({
-            maximumRed : 0.75,
-            maximumGreen : 0.65,
-            maximumBlue : 0.5,
-            alpha : 1.0
+        let color = Cesium.Color.fromRandom({
+          maximumRed: 0.75,
+          maximumGreen: 0.65,
+          maximumBlue: 0.5,
+          alpha: 1.0
         });
         GlobalData.relationColor[rrid] = color
         colors = color
       }
-      this.primitive[ronode.relatedObjectId] = this.createLine(pt1, pt2, sobject.id,colors)
+      this.primitive[ronode.relatedObjectId] = this.createLine(pt1, pt2, sobject.id, colors)
     }
   }
-  createLine(pt1, pt2, id,color) {
+  createLine(pt1, pt2, id, color) {
     // let posis = pt1.concat(pt2)
     let posis = this.dispose(pt1, pt2)
     let model = {

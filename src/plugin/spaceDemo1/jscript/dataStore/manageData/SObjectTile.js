@@ -1,4 +1,4 @@
-import globalData from '../../GlobalData'
+import GlobalData from '../../GlobalData'
 
 import SObjectFormGeometry from '../visualization/SObjectFormGeometry.js'
 import SObjectFormModel from '../visualization/SObjectFormModel.js'
@@ -14,17 +14,19 @@ import {
   MapEvent
 } from '../../event/Event.js'
 import map from '../../cesiumMap/map'
+import {
+  DH_CHECK_P_NOT_SAFE_PRIME
+} from 'constants';
 
 /**
 时空对象切片存储单元
  */
 class SObjectTile {
-  constructor(list,version) {
+  constructor(list) {
     this.list = list
-    this.version = version
 
     // 存储对象数据
-    this.sobjectList = {}
+    this.sobjectAll = {}
     // 存储显示对象
     this.primitiveList = {}
     // 关系线
@@ -37,77 +39,69 @@ class SObjectTile {
 
     this.bebavior = '' // 行为
 
-    // 切片是否载入
-    this.isload = 'unload'
-
     this.manageData(this.list)
 
-    this.parentTile = null
-
-    this.dynamicData = null
-
-    this.nextTime = nextTime
   }
 
   manageData(list) { // 处理数据
-    let trajectoryId = []
+
     for (let i = 0; i < list.length; i++) {
       let sobject = list[i]
-      if (sobject.forms && sobject.forms.length > 0) {
-        this.sobjectList[sobject.id] = sobject
-        // if (sobject.actions) {
-        //   let length = sobject.actions.length
-        //   for (let i = 0; i < length; i++) {
-        //     let act = sobject.actions[i]
-        //     if (act.sTime != act.eTime) {
-        //       trajectoryId.push(sobject.id)
-        //     }
-        //   }
-        // }
 
+      if (sobject.forms && sobject.forms.length > 0) {
+        if (!this.sobjectAll[sobject.id]) {
+          this.sobjectAll[sobject.id] = []
+        }
+        this.sobjectAll[sobject.id].push(sobject)
         this.createPrimitiveList(sobject)
       }
     }
-  }
-  // getTrajectory(trajectoryId) {
-  //   let ob = {
-  //     oids: trajectoryId,
-  //     tableName: 'taxibeijing',
-  //     // tableName: this.sobject.otype.tags,
-  //     startTime: this.DateChange(this.version.vid * 1000),
-  //     endTime: this.DateChange(this.nextTime),
-  //     // endTime:this.JulianDateChange(map.clock.clock.stopTime),
-  //     geoWkt: this.tile.arr[0] + ',' + this.tile.arr[1] + ',' + this.tile.arr[2] + ',' + this.tile.arr[3]
-  //     // version: this.sobject.version.vid,
-  //   }
-  //   // console.log(ob)
-  //   trajectoryQuery(ob).then(res => {
-  //     if (res.objectDynamicDatasList && res.objectDynamicDatasList[0].objectDynamicDataList && res.objectDynamicDatasList[0].objectDynamicDataList[0]) {
-  //       this.dynamicData = res.objectDynamicDatasList[0].objectDynamicDataList
+    for (let i in this.sobjectAll) {
+      let sobject = this.sobjectAll[i]
+      this.sobjectAll[i] = this.vidSort(sobject)
+    }
+    for (let i in this.primitiveList) {
+      let sobject = this.primitiveList[i]
+      this.primitiveList[i] = this.priSort(sobject)
+    }
 
-  //       this.dynamicData.forEach((n, i) => {
-  //         console.log(this.primitiveList[n.oid])
-  //         if (!this.primitiveList[n.oid]) {
-  //           return
-  //         }
-  //         this.primitiveList[n.oid].trajectory = new SObjectTrajectory(n.dynamicData, this.sobjectList[n.oid])
-  //       })
-  //     }
-  //     // this.create()
-  //   }, (err) => {
-  //     console.log('轨迹请求错误', err)
-  //   })
-  // }
+  }
+  //冒泡
+  vidSort(arr) {
+    let len = arr.length;
+    for (let i = 0; i < len; i++) {
+      for (let j = 0; j < len - 1 - i; j++) {
+        if (arr[j].version.vid > arr[j + 1].version.vid) { //相邻元素两两对比
+          let temp = arr[j + 1]; //元素交换
+          arr[j + 1] = arr[j];
+          arr[j] = temp;
+        }
+      }
+    }
+    return arr;
+  }
+  priSort(arr) {
+    let len = arr.length;
+    for (let i = 0; i < len; i++) {
+      for (let j = 0; j < len - 1 - i; j++) {
+        if (arr[j].sobject.version.vid > arr[j + 1].sobject.version.vid) { //相邻元素两两对比
+          let temp = arr[j + 1]; //元素交换
+          arr[j + 1] = arr[j];
+          arr[j] = temp;
+        }
+      }
+    }
+    return arr;
+  }
   /**
   创建显示对象集合
    */
   createPrimitiveList(sobject) {
-    if (this.primitiveList[sobject.id]) {
-      console.log('同一切片有相同的sobject', sobject)
-      return
+    if (!this.primitiveList[sobject.id]) {
+      this.primitiveList[sobject.id] = []
     }
 
-    this.primitiveList[sobject.id] = {
+    let pri = {
       primitive: [],
       sobject: null,
       trajectory: null,
@@ -116,19 +110,19 @@ class SObjectTile {
     let primitive = this.createPrimitive(sobject)
     let trajectory = null
     let relation = null
-    if (sobject.network.nodes.length > 0) {
+    if (sobject.network && sobject.network.nodes.length > 0) {
       relation = new SObjectRelationPrimitive(sobject)
     }
-    // if (globalData.historyOpen) {
+    // if (GlobalData.historyOpen) {
     //   trajectory = new SObjectTrajectory(sobject,this.parameter.geoWkt)
     // }
-    this.primitiveList[sobject.id] = {
+    pri = {
       primitive: primitive,
       sobject: sobject,
       trajectory: trajectory,
       relation: relation
     }
-
+    this.primitiveList[sobject.id].push(pri)
   }
   // 根据sobject创建渲染对象
   createPrimitive(sobject) {
@@ -182,57 +176,82 @@ class SObjectTile {
     }
     return null
   }
-  
+
   /**
   对象更新方法
    */
   update(frameState) {
-    
-      for (let i in this.primitiveList) {
-        let primitive = this.primitiveList[i]
-        // 计算轨迹坐标与跟随
-        if (globalData.historyOpen && primitive.trajectory) {
-          // primitive.trajectory.countCoordinate(map.nowtime, primitive.primitive)
-          // 控制轨迹线个轨迹点的显示
-          // primitive.trajectory.update(frameState)
+    let time = this.getTimes()
 
-          // 控制跟随
-          if (map.follow.open) {
-            map.follow.movePlace(primitive)
+    for (let i in this.primitiveList) {
+      let pri = this.primitiveList[i]
+      for (let q = 0; q < pri.length; q++) {
+        let primitive = pri[q]
+        let vid = primitive.sobject.version.vid
+        if (vid * 1000 >= time.nowTime) {
+          // 计算轨迹坐标与跟随
+          if (GlobalData.historyOpen && primitive.trajectory) {
+            // primitive.trajectory.countCoordinate(map.nowtime, primitive.primitive)
+            // 控制轨迹线个轨迹点的显示
+            // primitive.trajectory.update(frameState)
+
+            // 控制跟随
+            // if (map.follow.open) {
+            // map.follow.movePlace(primitive)
+            // }
           }
-        }
-
-        primitive.primitive.forEach(n => {
-          if (n && n.update && n._primitive) {
-            let id = n.id
-            // 清除选中
-            if (n.pitch && id != globalData.currentSelectObjectId) {
-              n.clearSelectStyle()
-            }
-            // 选中
-            if (!n.pitch && id == globalData.currentSelectObjectId) {
-              n.showSelectStyle()
-            }
-            // 类视图列表树控制显示隐藏
-            let otypeId = n.sobject.otype.id
-            let show = true
-            globalData.showTreeArr.forEach(q => {
-              if (otypeId == q) {
-                show = false
+          if (primitive && primitive.primitive) {
+            primitive.primitive.forEach(n => {
+              if (n && n.update && n._primitive) {
+                let id = n.id
+                // 清除选中
+                if (n.pitch && id != GlobalData.currentSelectObjectId) {
+                  n.clearSelectStyle()
+                }
+                // 选中
+                if (!n.pitch && id == GlobalData.currentSelectObjectId) {
+                  n.showSelectStyle()
+                }
+                // 类视图列表树控制显示隐藏
+                let otypeId = n.sobject.otype.id
+                let show = true
+                // let show = false
+                // GlobalData.disappearList.forEach(q => {
+                //   if (otypeId == q) {
+                //     show = true
+                //   }
+                // })
+                if (show) {
+                  n.update(frameState)
+                }
               }
             })
-            if (show) {
-              n.update(frameState)
+            // 关系线
+            if (primitive.relation) {
+              if (GlobalData.relationShow) {
+                primitive.relation.update(frameState)
+              }
             }
           }
-        })
-        // 关系线
-        if (primitive.relation) {
-          if (globalData.relationShow) {
-            primitive.relation.update(frameState)
-          }
+          break
         }
       }
+    }
+  }
+  getTimes() {
+    //时间轴当前时间
+    let nowTime = new Date(Cesium.JulianDate.toDate(map.clock.clock.currentTime)).getTime()
+    //时间轴起始时间
+    let startTime = new Date(Cesium.JulianDate.toDate(map.clock.clock.startTime)).getTime()
+    //时间轴结束时间
+    let stopTime = new Date(Cesium.JulianDate.toDate(map.clock.clock.stopTime)).getTime()
+
+    let time = {
+      nowTime: nowTime,
+      startTime: startTime,
+      stopTime: stopTime
+    }
+    return time
   }
   // 计算轨迹坐标与跟随
   trajectoryMove(primitive) {}
@@ -299,20 +318,7 @@ class SObjectTile {
       }
     }
   }
-  /**
-  卸载渲染对象
-   */
-  unloadPrimitive() {}
-  /**
-  释放切片所有数据
-   */
-  dispose() {
 
-    // 存储切片对象数据
-    this.sobjectList = null
-    // 存储切片显示对象
-    this.primitiveList = null
-  }
   JulianDateChange(t) {
     let time = new Date(Cesium.JulianDate.toDate(t))
     let y = time.getFullYear()

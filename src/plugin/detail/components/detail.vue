@@ -3,10 +3,10 @@
         <div class="detail-root">
             <el-collapse v-model="activeNames" @change="handleChange">
                 <el-collapse-item title=" 属性信息" name="1">
-                    <c-attribute></c-attribute>
+                    <c-attribute :attributes="attributes" :objectId="sobject.id"></c-attribute>
                 </el-collapse-item>
                 <el-collapse-item title=" 形态面板" name="2">
-                    <c-form></c-form>
+                    <c-form :forms="forms"></c-form>
                 </el-collapse-item>
                 <el-collapse-item title=" 行为面板" name="3">
                     <c-behavior></c-behavior>
@@ -31,6 +31,9 @@ export default {
   data() {
     return {
         activeNames: ["1"],
+        attributes:[],
+        forms:[],
+        sobject:{}
     };
   },
   props: {},
@@ -45,6 +48,7 @@ export default {
       
   },
   mounted() {
+    this.getData();
   },
   watch:{
 
@@ -53,6 +57,13 @@ export default {
     handleChange(val) {
       //console.log(val);
     },
+    getData(){
+        _bus.$on('middle.select',object=>{
+            this.sobject = object;
+            this.attributes = object.attributes;
+            this.forms = object.forms;
+        })
+    }
   }
 };
 </script>

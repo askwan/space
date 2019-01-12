@@ -1,4 +1,5 @@
-import StyleCtrl from './StyleCtrl'
+// import StyleCtrl from './StyleCtrl'
+import colorList from './colorList'
 class SObjectFormGeometry {
   constructor(form, sobject) {
     this.sobject = sobject
@@ -11,15 +12,10 @@ class SObjectFormGeometry {
     this.isload = false
     this.pitch = false // 是否被选中
     this.createGeometry(this.form)
-    // this.update()
   }
   update(frameState) {
     let primitive = this._primitive
     if (primitive != null) {
-      // if(this.sobject.name='居民A'){
-      //   console.log(this.uuid)
-      //   console.log(this.sobject)
-      //   }
       primitive.update(frameState)
     }
     let primitiveLabel = this._primitiveLabel
@@ -99,7 +95,15 @@ class SObjectFormGeometry {
   }
   createGeometry(form) {
     try {
-      this.cesiumStyle = StyleCtrl.getGeomFormStyle(this.sobject, this.form)
+      // this.cesiumStyle = StyleCtrl.getGeomFormStyle(this.sobject, this.form)
+      // console.log(this.sobject, this.form)
+      // console.log(this.cesiumStyle,StyleCtrl.styleList)
+      // let c=colorList.getColor(this.sobject)
+      this.cesiumStyle=colorList.getColor(this.sobject)
+      // this.cesiumStyle.color=c.color
+      // this.cesiumStyle.opacity=c.opacity
+      // console.log(this.cesiumStyle)
+      // console.log(getColor.getColor(this.sobject))
       if (form.type == 21) {
         this._primitiveLabel = this.createLabel(form)
         this._primitive = this.createPoint(form)
@@ -158,7 +162,7 @@ class SObjectFormGeometry {
     }
     let point = {
       position: Cesium.Cartesian3.fromDegrees(geom.coordinates[0], geom.coordinates[1]),
-      image: 'static/images/redmarker.png',
+      image: '/img/redmarker.png',
       height: 16,
       width: 16,
       color: Cesium.Color.WHITE,
@@ -277,14 +281,25 @@ class SObjectFormGeometry {
     }
     return 0
   }
+  getMinHeight(sobject) {
+    for (let i in sobject.attributes) {
+      let sobj = sobject.attributes[i]
+      if (sobj.name == 'min_height'||sobj.name == 'minheight') {
+        return parseFloat(sobj.value)
+      }
+    }
+    return 0
+  }
   createPolygon(form, cesiumStyle) {
     let geom = form.geom
     if (geom == null) {
       return null
     }
     let height = this.getHeight(this.sobject)
-
-    if (geom.nodes == 'Polygon') {
+    let minheight = this.getMinHeight(this.sobject)
+    height=height?height:0
+    minheight=minheight?minheight:0
+    if (geom.type == 'Polygon') {
       // return
       let posiss = []
 
@@ -298,7 +313,8 @@ class SObjectFormGeometry {
         polygonHierarchy: new Cesium.PolygonHierarchy(
           Cesium.Cartesian3.fromDegreesArray(posiss)
         ),
-        extrudedHeight: height ? height : 0 // 拔高
+        height: height, // 拔高
+        extrudedHeight:minheight // 拔高
       })
       let geometry = []
       // geometry.push(Cesium.PolygonGeometry.createGeometry(polygon))
@@ -338,7 +354,8 @@ class SObjectFormGeometry {
       hierarchy.forEach((n, i) => {
         let polygon = new Cesium.PolygonGeometry({
           polygonHierarchy: poly(n),
-          extrudedHeight: height ? height : 0 // 拔高
+          height: height, // 拔高
+          extrudedHeight:minheight // 拔高
         })
         // geometry.push(Cesium.PolygonGeometry.createGeometry(polygon))
         geometry.push(polygon)
@@ -350,14 +367,7 @@ class SObjectFormGeometry {
     }
   }
   createPrimitive(geometry, styleColor) {
-    // console.log(styleColor)
-    if (this.sobject.id == 8194173919232 || this.sobject.id == 9922608848896) {
-      styleColor = new Cesium.Color(255 / 255, 193 / 255, 37 / 255, 0.2)
-    }
-    if(this.sobject.id==4069588516864||this.sobject.id==9805956866048||this.sobject.id==1466040541184){
-      styleColor = new Cesium.Color(143 / 255, 188 / 255, 143 / 255, 0.8)
-
-    }
+  
     let primitive = []
     geometry.forEach((n, i) => {
       primitive.push(new Cesium.GeometryInstance({

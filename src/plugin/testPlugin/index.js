@@ -20,7 +20,8 @@ const p = {
       console.log('tool');
     }
   }],
-  inited(){
+  inited(options){
+    console.log(options,'options')
     _bus.$on('middle.mapReady',manage=>{
       this.store.manage = manage;
     })

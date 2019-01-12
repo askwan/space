@@ -41,6 +41,7 @@ export default {
   mounted() {
     // console.log(this.components.length);
     // console.log(this.manage.uiManage.getManage(),"43")
+    // this.initSize()
   },
   methods: {
     openUpWindow(name, w) {
@@ -74,17 +75,19 @@ export default {
 
         //参数 name  top  left  width  height  show
         //rightLeft  就是在最右 0是最左
-        this.leftOrRight("middle", 0, 0, bodyWidth, bodyHeight, true);
+        // this.leftOrRight("middle", 0, 0, bodyWidth, bodyHeight, true);
         // this.leftOrRight("left", 0, 0, 300, height, true);
         // this.leftOrRight("right", 0, rightLeft, 300, height, false);
         // this.leftOrRight("aaaa", 0, 0, 300, height, false);
         // this.leftOrRight("xxxx", 0, rightLeft, 300, height, false);
         // this.leftOrRight("dddd", 0, 0, 300, height, false);
       };
-      document.body.onresize = () => {
-        // console.log("改变")
+      window.onresize = () => {
+        console.log("改变")
         bodyHeight = document.body.clientHeight;
         bodyWidth = document.body.clientWidth;
+
+        bodyWidth=bodyWidth<1200?1200:bodyWidth
         this.manage.uiFunction.calcBody({
           width: bodyWidth,
           height: bodyHeight
@@ -113,6 +116,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 .index-home {
+  min-width: 1200px;
   height: 100%;
   position: relative;
   .home-left {
@@ -127,6 +131,7 @@ export default {
     position: absolute;
     height: 100%;
     background-color: #a39e9e;
+    overflow-y: hidden;
     .tool-list {
       position: absolute;
       top: 30px;

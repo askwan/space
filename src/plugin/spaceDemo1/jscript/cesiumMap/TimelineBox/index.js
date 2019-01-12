@@ -24,7 +24,10 @@ var TimeLineBox = {
   },
   enable: function () { //时间轴显示
     this.timeLineDom.style.display = "block";
-    this.viewer.timeLine.resize();
+    this.timeLineChangeFn();
+    setTimeout(() => {
+      this.viewer.timeLine.resize();
+    }, 10)
   },
   disabled: function () { //时间轴销毁
     this.timeLineDom.style.display = "none";

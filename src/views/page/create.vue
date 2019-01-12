@@ -122,6 +122,7 @@ export default {
       Promise.all([p1,p2]).then(list=>{
           console.log(list)
           this.uis = list[0].list;
+          console.log(this.uis)
           this.views = list[1].list;
       })
 

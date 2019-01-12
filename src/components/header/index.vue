@@ -59,7 +59,8 @@
       },
       operate(item){
         if(item.id===1){
-          this.$router.push('/market')
+          // this.$router.push('/market');
+          this.$alert("开发中");
         }
       },
       pathTo(path){
@@ -73,5 +74,11 @@
     width: 26px;
     height: 26px;
     border-radius: 50%;
-  }
+
+  }    
+  .nav-left{
+      font-size: 1.8689rem;
+      color: #4c4c4c;
+      font-weight: 600;
+    }
 </style>

@@ -225,9 +225,10 @@ export default {
     margin-bottom: 20px;
     &>b{
       float: left;
-      font-size: 1.7689rem;
-      color: #4c4c4c;
-      font-weight: 600;
+      font-size: 1.4rem;
+      color: #383838;
+      font-weight: 400;
+      padding-top: 8px;
     }
     .tab-but{
       float:right;

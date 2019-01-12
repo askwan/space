@@ -6,21 +6,22 @@ import GlobalData from '../../GlobalData'
 class MapDataStore {
   constructor() {
     // 当前引擎加载的对象数据
-    this.lumpAll = {} // 总块  里面对象包数组  是sobjectID
+    this.SObjectAll = {}
+    this.sobjectData = ''
   }
 
   createSobjectTile(list) {
-    console.log(list,'new sobject')
-    this.lumpAll.one = new SObjectTile(list)
+    // console.log(list,'new sobject')
+    console.log('开始渲染')
+    this.sobjectData = list
+
+    this.SObjectAll = new SObjectTile(list)
   }
 
   update(frameState) {
     // 对场景内的切片进行调度
-    if (GlobalData.historyOpen) {
-      return
-    }
-    for (let i in this.lumpAll) {
-      this.lumpAll[i].update(frameState)
+    if (!GlobalData.historyOpen &&this.sobjectData) {
+      this.SObjectAll.update(frameState)
     }
   }
 

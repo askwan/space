@@ -1,26 +1,27 @@
 // import TimeLineBox from "@/Cesium/Widgets/TimeLineBox";
 import map from "../cesiumMap/map";
-
+import GlobalData from '../GlobalData';
+import manage from "../manage/uiManage.js";
 import Vue from 'vue'
 var vue = new Vue
 
 var toolBarData = {};
-toolBarData.setButtonList=[{
-  name: "关系",
-  val: "setRelation",
-  show: false
-},
-{
-  name: "退出历史",
-  val: "exitHistory",
-  show: true
-  // }, {
-  //   name: "退出轨迹",
-  //   val: "exitTrajectory",
-  //   show: true
-},
-],
-toolBarData.pullList = [{
+toolBarData.setButtonList = [{
+      name: "关系",
+      val: "setRelation",
+      show: false
+    },
+    {
+      name: "退出历史",
+      val: "exitHistory",
+      show: true
+      // }, {
+      //   name: "退出轨迹",
+      //   val: "exitTrajectory",
+      //   show: true
+    },
+  ],
+  toolBarData.pullList = [{
     name: "对象列表",
     val: "objectUi"
   }, {
@@ -99,11 +100,18 @@ toolBarData.measurementClear = () => {
 }
 
 toolBarData.fun = (name, _this) => {
-  let ui = _this.$store.state.ui[name];
-  let operate = ui.isShow ? "closeTab" : "openTab";
-  _this.$store.commit(_this.MutationsList.openTab, {
-    name: name
-  });
+  console.log(name, _this)
+
+  let obj = {
+    name: name,
+    show: true,
+    left: 0
+  }
+  if (!(name == 'objectUi' || name == 'treeUi')) {
+    obj.left = manage.commonality.bodyWidth - 300
+  }
+  manage.uiFunction.updated(obj);
+
 }
 toolBarData.tool = [{
     content: '搜索',
@@ -138,6 +146,7 @@ toolBarData.tool = [{
     icon: 'icon-shijian',
     act: false,
     click: (_this) => {
+      GlobalData.timelineShow = !GlobalData.timelineShow
       // let isShow, operate;
       // isShow = _this.$store.state.ui.timeLineUi.isShow;
       // operate = isShow ? "closeTab" : "openTab";
@@ -158,6 +167,7 @@ toolBarData.tool = [{
     act: false,
 
     click: (_this) => {
+      GlobalData.historyUpWindow = true
       // _this.$store.commit(_this.MutationsList.openTimeVersion, {
       //   value: true
       // });
@@ -174,54 +184,56 @@ toolBarData.tool = [{
   //     });
   //   }
   // },
-  {
-    content: '跟随目标',
-    icon: 'icon-maijiagenzong',
-    act: false,
-    click: (_this, i) => {
-      let model = map.getGlobalDataCurrentSelectObject()
-      if (toolBarData.tool[i].act) {
-        vue.$notify.info({
-          title: '取消',
-          message: '取消跟随选中模型',
-        });
-        toolBarData.tool[i].act = false
-        map.follow.open = false
-        map.follow.id = ''
-        map.follow.uuid = ''
-        map.setFollowOpen(false)
-      } else {
-        if (model.forms) {
-          for (let q = 0; q < model.forms.length; q++) {
-            let n = model.forms[q]
-            if (n && n.type && n.type == 50) {
-              vue.$notify({
-                title: '跟随',
-                message: '跟随选中模型',
-                type: 'success'
-              });
-              toolBarData.tool[i].act = true
-              map.follow.open = true
-              map.follow.id = model.id
-              map.follow.uuid = model.uuid
-              map.setFollowOpen(true)
+  // {
+  //   content: '跟随目标',
+  //   icon: 'icon-maijiagenzong',
+  //   act: false,
+  //   click: (_this, i) => {
+  //     let model = map.getGlobalDataCurrentSelectObject()
+  //     console.log()
+  //     if (toolBarData.tool[i].act) {
+  //       vue.$notify.info({
+  //         title: '取消',
+  //         message: '取消跟随选中模型',
+  //       });
+  //       toolBarData.tool[i].act = false
+  //       map.follow.open = false
+  //       map.follow.id = ''
+  //       map.follow.uuid = ''
+  //       map.setFollowOpen(false)
+  //     } else {
+  //       if (model.forms) {
+  //         for (let q = 0; q < model.forms.length; q++) {
+  //           let n = model.forms[q]
+  //           if (n && n.type && n.type == 50) {
+  //             vue.$notify({
+  //               title: '跟随',
+  //               message: '跟随选中模型',
+  //               type: 'success'
+  //             });
+  //             toolBarData.tool[i].act = true
+  //             map.follow.open = true
+  //             map.follow.id = model.id
+  //             map.follow.uuid = model.uuid
+  //             map.setFollowOpen(true)
 
-              return
-            }
-          }
-          vue.$notify.error({
-            title: '错误',
-            message: '请先选中模型'
-          });
-        } else {
-          vue.$notify.error({
-            title: '错误',
-            message: '请先选中模型'
-          });
-        }
-      }
-    }
-  }, {
+  //             return
+  //           }
+  //         }
+  //         vue.$notify.error({
+  //           title: '错误',
+  //           message: '请先选中模型'
+  //         });
+  //       } else {
+  //         vue.$notify.error({
+  //           title: '错误',
+  //           message: '请先选中模型'
+  //         });
+  //       }
+  //     }
+  //   }
+  // },
+   {
     content: '获取屏幕坐标',
     icon: 'icon-msnui-foresight',
     act: false,
@@ -248,8 +260,16 @@ toolBarData.tool = [{
       } else {
         _this.measurementAct = false;
         toolBarData.tool[i].act = false
-        map.tool.tools.MeasurementManage.setSelectState('clear')
+        // map.tool.tools.MeasurementManage.setSelectState('clear')
         map.tool.setCurrent('PickModel')
+        map.tool.tools.MeasurementManage.clear()
+
+        let data = toolBarData.measurementList;
+        for (let i in data) {
+          let type = data[i]
+          type.show = false;
+
+        }
       }
     }
   }

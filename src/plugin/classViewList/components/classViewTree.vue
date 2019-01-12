@@ -75,6 +75,7 @@ export default {
       //传递给 data 属性的数组中该节点所对应的对象、节点本身是否被选中、节点的子树中是否有被选中的节点
       console.log(a);
       // console.log(b);
+      console.log(globalData.showTreeArr,567)
 
       let otypes = [];
       if (a.otypes) {

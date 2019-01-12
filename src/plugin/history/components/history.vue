@@ -84,9 +84,8 @@ export default {
           loadAction: true // 是否载入操作集合
       };
       getVal.ajaxData(par).then(res=>{
-          // console.log(res)
+          console.log(res[0],78979)
           this.objectDetail = res[0];
-
       })
     },
 

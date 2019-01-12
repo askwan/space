@@ -19,9 +19,14 @@
   </div>
 </template>
 <script>
+const psdeBaseUrl = "http://bt1.geosts.ac.cn/api";
+const psdeHost = psdeBaseUrl + "/dae/datastore";
+const psdeUrl = psdeHost + "/rest/v0.1.0/datastore/";
 // import { objectQuery } from "@/psde/objectService";
 // import map from "@/script/map";
-
+import axios from "axios";
+import GlobalData from '../../../jscript/GlobalData'
+import map from '../../../jscript/cesiumMap/map.js'
 export default {
   data() {
     return {
@@ -34,33 +39,33 @@ export default {
   components: {},
   computed: {},
   watch: {
-    // searchValue() {
-    //   this.options.forEach((n, i) => {
-    //     if (n.id == this.searchValue) {
-    //       let geoBox = n.geoBox;
-    //       if (geoBox) {
-    //         if (geoBox.maxx == geoBox.minx && geoBox.maxy == geoBox.miny) {
-    //           map.viewer.camera.flyTo({
-    //             destination: Cesium.Cartesian3.fromDegrees(
-    //               geoBox.minx,
-    //               geoBox.miny,
-    //               5000.0
-    //             )
-    //           });
-    //         } else {
-    //           map.viewer.camera.flyTo({
-    //             destination: Cesium.Rectangle.fromDegrees(
-    //               geoBox.minx,
-    //               geoBox.miny,
-    //               geoBox.maxx,
-    //               geoBox.maxy
-    //             )
-    //           });
-    //         }
-    //       }
-    //     }
-    //   });
-    // }
+    searchValue() {
+      this.options.forEach((n, i) => {
+        if (n.id == this.searchValue) {
+          let geoBox = n.geoBox;
+          if (geoBox) {
+            if (geoBox.maxx == geoBox.minx && geoBox.maxy == geoBox.miny) {
+              map.viewer.camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(
+                  geoBox.minx,
+                  geoBox.miny,
+                  5000.0
+                )
+              });
+            } else {
+              map.viewer.camera.flyTo({
+                destination: Cesium.Rectangle.fromDegrees(
+                  geoBox.minx,
+                  geoBox.miny,
+                  geoBox.maxx,
+                  geoBox.maxy
+                )
+              });
+            }
+          }
+        }
+      });
+    }
   },
   mounted() {},
   methods: {
@@ -74,11 +79,27 @@ export default {
         this.loading = true;
         setTimeout(() => {
           this.loading = false;
-          objectQuery.ByNameAndOTName.query({
-            names: val
-          }).then(response => {
-            this.options = response.list;
-          });
+
+          let url = psdeUrl + "/object/query";
+          axios
+            .get(url, {
+              params: {
+                names: val,
+                loadAttr: true,
+                loadForm: true,
+                loadObjType: true,
+                orderType: "ID",
+                descOrAsc: true,
+                sdomains: GlobalData.sdomains
+              }
+            })
+            .then(response => {
+              console.log(response.data.data);
+              this.options =  response.data.data.list;
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
         }, 200);
       } else {
         this.options = [];

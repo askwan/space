@@ -5,11 +5,12 @@
       <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
       <el-tree
         class="filter-tree"
-        :data="GlobalData.sobjectDatalist"
+        :data="GlobalData.sobjectTreelist"
         highlight-current
         :props="defaultProps"
         :expand-on-click-node="false"
         ref="tree"
+        :filter-node-method="filterNode"
         @node-click="checkchange"
         @node-contextmenu="rightEvent"
       ></el-tree>
@@ -30,7 +31,7 @@
 // import "../../assets/public.scss";
 import GlobalData from "../../jscript/GlobalData";
 // import { EventBus, MapEvent } from "../../jscript/event/Event.js";
-
+import map from '../../jscript/cesiumMap/map'
 let timer;
 // let data;
 export default {
@@ -72,6 +73,7 @@ export default {
     //   this.data = GlobalData.treeList;
     },
     filterText(val) {
+      console.log(val)
       this.$refs.tree.filter(val);
     },
   },
@@ -82,9 +84,9 @@ export default {
   methods: {
     checkchange(a, b, c) {
     //   GlobalData.selectPick = a;
-    //   console.log(a, b, c);
-    //   let obj = {};
-    //   EventBus.fire(MapEvent.LeftClick, obj);
+      console.log(a, b, c);
+      GlobalData.currentSelectObjectId = a.id;
+      GlobalData.currentSelectObject = a;
     },
     rightEvent(event, obj, c, d) {
       event.stopPropagation();
@@ -93,8 +95,8 @@ export default {
       this.showMenu = true;
       console.log(event, obj);
 
-      this.posi.x = event.clientX - 10;
-      this.posi.y = event.clientY - 106;
+      this.posi.x = event.layerX + 14;
+      this.posi.y = event.layerY + 34;
       console.log(this.posi);
       clearTimeout(timer);
       timer = setTimeout(() => {
@@ -102,8 +104,26 @@ export default {
       }, 3000);
     },
     selectMenu() {
-    //   EventBus.fire(MapEvent.RightClick, GlobalData.selectPick);
-    console.log("定位111")
+     this.showMenu = false;
+      let geoBox = GlobalData.selectPick.geoBox;
+      if (geoBox.maxx == geoBox.minx && geoBox.maxy == geoBox.miny) {
+        map.viewer.camera.flyTo({
+          destination: Cesium.Cartesian3.fromDegrees(
+            geoBox.minx,
+            geoBox.miny,
+            5000.0
+          )
+        });
+      } else {
+        map.viewer.camera.flyTo({
+          destination: Cesium.Rectangle.fromDegrees(
+            geoBox.minx,
+            geoBox.miny,
+            geoBox.maxx,
+            geoBox.maxy
+          )
+        });
+      }
     },
     filterNode(value, data) {
       if (!value) return true;

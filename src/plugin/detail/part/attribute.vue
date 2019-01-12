@@ -1,14 +1,14 @@
 <template>
     <div>
-        <div class='attribute upWindows' v-if="aimObj.attributes">
-            <div class="title">对象ID：{{aimObj.id}}</div>
+        <div class='attribute upWindows'>
+            <div class="title">对象ID：{{objectId}}</div>
             <div class="up-ul">
                 <div class="up-li">
                     <span>属性名</span>
                     <span>属性值</span>
                 </div>
             </div>
-            <div v-for="(n,i) in aimObj.attributes" :key="i" class="up-ul">
+            <div v-for="(n,i) in attributes" :key="i" class="up-ul">
                 <div class="up-li">
                     <span>{{n.name}}</span>
                     <span>{{n.value}}</span>
@@ -27,12 +27,13 @@ export default {
         getVal
     };
   },
+  props:['objectId','attributes'],
   components: {},
   computed: {},
   created() {},
   mounted() {
 
-    this.getData()
+    // this.getData()
   },
   methods: {
 

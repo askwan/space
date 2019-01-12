@@ -34,7 +34,6 @@ class DragUiData {
 let uiManage = {
   middleUi: '',
   manageUi: {
-
   },
   toolBars: [],
   getManage() {

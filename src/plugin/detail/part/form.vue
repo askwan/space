@@ -1,7 +1,7 @@
 <template>
     <div class="form-tab upWindows" id="bgc">
         <el-collapse accordion>
-            <el-collapse-item v-for="(form,i) in formList" :key="i">
+            <el-collapse-item v-for="(form,i) in forms" :key="i">
               <template slot="title">
                 {{transForm(form.type)}}
               </template>
@@ -68,7 +68,7 @@ export default {
         style:[]
     };
   },
-  props: {},
+  props: ['forms'],
   components: {},
   computed: {
     formList() {
@@ -89,7 +89,6 @@ export default {
   mounted() {
       this.getData()
       getVal.getDict().then(res=>{
-        console.log(res,321112)
             this.array = res
         })
   },
@@ -126,7 +125,6 @@ export default {
             descOrAsc: true
         }
         getVal.getFormStyle(obj).then(res=>{
-            console.log(res,23333333333333)
             this.style = res
         })
         try {

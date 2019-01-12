@@ -48,6 +48,7 @@ $nav-height:50px;
   overflow: hidden;
   position: relative;
   overflow-y: auto;
+  // background-color: #f8f8f8;
 }
 .app-height{
   height: calc(100% - #{$nav-height});

@@ -1,7 +1,7 @@
 import map from './index.vue'
 import PluginBase from '@/PluginBase'
 // import echarts from "./jscript/echarts.js"
-
+import store from './store'
 const p = {
   show:true,
   name:'spaceDemo1',
@@ -11,13 +11,18 @@ const p = {
   icon:'',
   toolbar:false,
   options:[],
-  inited(){
+  inited(data){
+    console.log('时空域',data)
+    // map.methods.setSdomains(data.id)
+    store.sdomains=data.sdomain.id
     // _bus.$on('middle.mapReady',manage=>{
     //   this.store.manage = manage;
     // })
   },
   uis:[{name:'spaceDemo1',show:true,tabs:'right-1',component:map,position:'middle'}],
+
   methods:{
+
     // getCenter(){
     //   console.log('getCenter');
     // },

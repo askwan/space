@@ -22,8 +22,8 @@
           </div>
         </div>
         <div class="plugin-downlon flex-center radius-2 shrink mg-right-small">
-          <!-- <i class="el-icon-download font-36 font-gray pointer-default" @click="downloadPlugin(plugin)"></i> -->
-          <i class="el-icon-delete font-36 font-gray pointer-danger" @click="deletePlugin(plugin)"></i>
+          <i v-if="localPlugins.find(el=>el.id==plugin.name)" class="el-icon-delete font-36 font-gray pointer-danger" @click="deletePlugin(plugin)"></i>
+          <i v-else class="el-icon-download font-36 font-gray pointer-default" @click="downloadPlugin(plugin)"></i>
         </div>
       </li>
     </ul>
@@ -48,13 +48,15 @@
         pageNumber:1,
         pages:1,
         plugins:[],
-        total:0
+        total:0,
+        localPlugins:[]
       }
     },
     props:{},
     components:{},
     computed:{},
     mounted(){
+      this.getLocal();
       this.getList();
     },
     filters:{
@@ -75,10 +77,21 @@
         console.log(fileUrl,fileName);
         pluginServer.download({fileUrl:fileUrl,name:fileName}).then(res=>{
           console.log(res,"res");
+          this.localPlugins.push({id:res.name});
         })
       },
       deletePlugin(plugin){
         console.log(plugin);
+        let obj = {
+          name:plugin.name
+        };
+        pluginServer.deletePlugin(obj).then(res=>{
+          console.log(res,'success');
+          this.localPlugins = this.localPlugins.filter(el=>el.id!=obj.name);
+        })
+        .catch(err=>{
+          console.log(err,'err')
+        })
       },
       getList(){
         // console.log(serverApp.imageUrl)
@@ -91,6 +104,18 @@
           this.pages = res.data.pages;
           this.pageNumber = res.data.pageNumber;
           this.total = res.data.total;
+          console.log(this.plugins)
+        })
+      },
+      getLocal(){
+        let p1 = pluginServer.query({type:1});
+        let p2 = pluginServer.query({type:2});
+        let p3 = pluginServer.query({type:3});
+        Promise.all([p1,p2,p3]).then(lists=>{
+          console.log(lists);
+          lists.forEach(els=>{
+            this.localPlugins = this.localPlugins.concat(els.list);
+          })
         })
       },
       changePage(pageNum){

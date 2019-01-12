@@ -12,8 +12,6 @@ export default {
   },
   mounted() {
     this.init();
-    console.log(_bus)
-      console.log(this.sdomain,'sdomain')
   },
   methods:{
     async init(){
@@ -52,9 +50,10 @@ export default {
         let pluginConfig = plugin.uis[k];
         pluginConfig.name = this.randomName();
         pluginConfig.component = Vue.component(name,pluginConfig.component);
+        // console.log(name,"---",pluginConfig.component)
       };
       if(typeof plugin.inited=='function'){
-        plugin.inited();
+        plugin.inited({sdomain:this.sdomain});
       }
       pluginManage.setPlugin(plugin);
       return new Promise((resolve,reject)=>{
@@ -67,6 +66,7 @@ export default {
       module.plugins.forEach(plugin => {
         this.manage.uiManage.setToolBar(plugin);
         this.manage.uiManage.setPluginUi(this, plugin);
+        // console.log(plugin,666666)
       });
 
       this.initSize();

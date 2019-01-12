@@ -8,7 +8,7 @@ export default new PluginBase({
   title:'pull',
   icon:'el-icon-time',
   type:3,
-  toolbar:true,
+  toolbar:false,
   options:[{
     fn(){
       console.log('setting')
@@ -26,5 +26,10 @@ export default new PluginBase({
     tabs:'detail',
     position:'right',
     icon: "el-icon-info"
-  }]
+  }],
+  methods:{
+  },
+  inited(){
+    // this.listenBus();
+  }
 })
