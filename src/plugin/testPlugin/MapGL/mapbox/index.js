@@ -3,8 +3,6 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import Operate from './Operate'
 import Manager from './Manager'
 
-import 
-
 export default class MapBoxGL extends Operate {
   /**
    * 创建mapbox
