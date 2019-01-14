@@ -17,6 +17,7 @@ export default class Operate extends Evented {
     return this.map.setStyle(id)
   }
   addLayer(layer){
+    // console.log(this.map.addLayer,'map')
     this.map.addLayer(layer);
   }
   removeLayer(layerId){

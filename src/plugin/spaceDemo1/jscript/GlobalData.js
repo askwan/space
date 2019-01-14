@@ -26,6 +26,7 @@ let GlobalData = {
   }, //鼠标当前坐标
 
   timelineShow: false, //时间轴的显示
+  TimeLineBox:'',
 
   currentSelectObjectId: '', //选中id
   currentSelectObject: '', //选中sobject

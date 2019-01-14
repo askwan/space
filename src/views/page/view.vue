@@ -30,10 +30,18 @@ export default {
   mounted() {
       let userObj = userMgr.getUser()
       let uid = userObj.id
-      let id = this.$route.query.app;
-
-      serverApp.getApps({uid:uid}).then(res=>{
-        // console.log(res)
+      let id = "";
+      let params = {}
+      if(this.$route.query.ownApp){
+        id = this.$route.query.ownApp;
+        params.uid = uid
+      }else{
+        id = this.$route.query.publicApp;
+        params.ownerShip = "PUBLIC"
+      }
+      
+      serverApp.getApps(params).then(res=>{
+        console.log(res)
         if(res.status==200){
           let arr = res.data
           arr.forEach(e => {
@@ -46,7 +54,6 @@ export default {
           });
         }
         // this.plugins = res.list;
-      
       });
   },
   methods: {}

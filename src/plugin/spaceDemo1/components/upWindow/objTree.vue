@@ -7,17 +7,22 @@
         class="filter-tree"
         :data="GlobalData.sobjectTreelist"
         highlight-current
-        show-checkbox
         node-key="id"
         :props="defaultProps"
         :expand-on-click-node="false"
         ref="tree"
         :filter-node-method="filterNode"
-        @node-click="checkchange"
         @node-contextmenu="rightEvent"
-        :default-checked-keys="defaultCheckList"
-        @check-change="checkboxchange"
-      ></el-tree>
+      >
+        <span class="filter-tree-con" slot-scope="{node}">
+          <i
+            class="el-icon-view t-icon"
+            :class="{click:!node.checked}"
+            @click="checkboxchange(node)"
+          ></i>
+          <span class="t-con" @click="checkchange(node)">{{node.label}}</span>
+        </span>
+      </el-tree>
       <div
         v-show="showMenu"
         class="location"
@@ -73,60 +78,55 @@ export default {
   },
   components: {},
   computed: {
-    defaultCheckList(){
-      return GlobalData.sobjectTreelist.map(el => el.id);
-    }
+    // defaultCheckList() {
+    //   return GlobalData.sobjectTreelist.map(el => el.id);
+    // }
   },
   watch: {
     loading() {
       //   this.data = GlobalData.treeList;
     },
     filterText(val) {
-      console.log(val);
       this.$refs.tree.filter(val);
     }
   },
   created() {},
-  mounted() {
-    // this.defaultCheckList = GlobalData.sobjectTreelist.map(el => el.id);
-  },
+  mounted() {},
   methods: {
-    checkboxchange(a, b, c) {
-      console.log(a, b, c);
+    checkboxchange(val) {
+      val.checked = !val.checked;
+      let show = !val.checked;
+      let data = val.data;
+      // console.log(val);
       let have = -1;
-      if (b) {
-      } else {
-      }
       GlobalData.disappearSobjectList.forEach((n, i) => {
-        if (n == a.id) {
+        if (n == data.id) {
           have = i;
         }
       });
       if (have >= 0) {
-        if (b) {
+        if (show) {
           GlobalData.disappearSobjectList.splice(have, 1);
-        } else {
         }
       } else {
-        if (b) {
-        } else {
-          GlobalData.disappearSobjectList.push(a.id);
+        if (!show) {
+          GlobalData.disappearSobjectList.push(data.id);
         }
       }
+      map.viewer.scene.render()
     },
-    checkchange(a, b, c) {
-      //   GlobalData.selectPick = a;
-      console.log(a, b, c);
-      GlobalData.currentSelectObjectId = a.id;
-      GlobalData.currentSelectObject = a;
+    checkchange(val) {
+      // console.log(val);
+      GlobalData.currentSelectObjectId = val.data.id;
+      GlobalData.currentSelectObject = val.data;
+      map.viewer.scene.render()
     },
     rightEvent(event, obj, c, d) {
       event.stopPropagation();
       event.preventDefault();
       GlobalData.selectPick = obj;
       this.showMenu = true;
-      console.log(event, obj);
-
+      // console.log(event, obj);
       this.posi.x = event.layerX + 14;
       this.posi.y = event.layerY + 34;
       console.log(this.posi);
@@ -169,6 +169,20 @@ export default {
   .object-tree {
     height: 100%;
     position: relative;
+    .filter-tree {
+      .filter-tree-con {
+        .t-icon {
+          color: #fff;
+          transition: all linear 0.1s;
+        }
+        .click {
+          color: #409eff;
+        }
+        .t-con {
+          margin-left: 5px;
+        }
+      }
+    }
     .location {
       position: absolute;
       width: 70px;

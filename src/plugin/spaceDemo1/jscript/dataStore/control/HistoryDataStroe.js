@@ -29,17 +29,20 @@ class HistoryDataStroe {
     console.log('版本开', 666666666)
     this.start = false
     GlobalData.historyOpen = true
+
     GlobalData.queryReady = false;
-    GlobalData.timelineShow = false
+    GlobalData.timelineShow = true
 
     map.clock.clock.startTime = Cesium.JulianDate.fromDate(new Date(start)).clone();
     map.clock.clock.currentTime = Cesium.JulianDate.fromDate(new Date(start)).clone();
     map.clock.clock.stopTime = Cesium.JulianDate.fromDate(new Date(end)).clone();
     map.viewer.scene.render();
-    GlobalData.timelineShow = true
-    // TimeLineBox.init(map.viewer, 'time-line') // 加载时间轴
-    // TimeLineBox.enable();
-    // TimeLineBox.disabled();
+
+    GlobalData.TimeLineBox.init(map.viewer, 'time-line') // 加载时间轴
+    GlobalData.TimeLineBox.disabled();
+    GlobalData.TimeLineBox.enable();
+
+
     let ob = {
       beginTime: this.JulianDateChange(map.clock.clock.startTime),
       endTime: this.JulianDateChange(map.clock.clock.stopTime),

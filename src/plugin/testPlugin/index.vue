@@ -67,7 +67,7 @@
       })
       
       mapGL.on('mouseup',data=>{
-        console.log(data,'up')
+        // console.log(data,'up')
       })
 
 

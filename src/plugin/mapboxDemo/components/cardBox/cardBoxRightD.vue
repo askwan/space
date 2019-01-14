@@ -1,12 +1,14 @@
 <template>
     <div class="cardBoxRightC">
       
-        <cards :title="title">
+        <cards class="tabChart" :title="title">
             <div id="main-top" style="width: 316px;height:240px;backgroundColor:#fff" title="点击查看大图" @click="passValue('discount_chart')"></div>
+            <!-- <div class="tit"></div> -->
+
         </cards>
-        <cards :title="title">
-          <!-- 123123 -->
+        <cards class="tabChart" :title="title">
            <div id="main-center" style="width:316px;height:240px;backgroundColor: #fff" title="点击查看大图" @click="passValue('dot_plot')"></div>
+
         </cards>
 
     </div>
@@ -53,5 +55,8 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+.tit{
+  height: 30px;
+}
 
 </style>

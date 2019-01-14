@@ -74,11 +74,29 @@
     }
 
     .el-card__body {
-      // height: calc(100% - 36px);
+      height: calc(100% - 36px);
+      // height: 100%;
+      overflow-y: auto;
       padding: 5px;
+      // height: 100%;
+      // overflow: scroll;
     }
   }
+  .tabChart {
+    // margin-bottom: 20px;
+    .el-card__header {
+      padding: 6px 10px;
+    }
 
+    .el-card__body {
+      height: auto;
+      // height: 100%;
+      overflow-y: auto;
+      padding: 5px;
+      // height: 100%;
+      // overflow: scroll;
+    }
+  }
   .upwindow {
     height: 100%;
     .object-tree {
@@ -108,6 +126,15 @@
   }
   .left-n,.right-n{
     .el-carousel{
+      .form-tab,.relation-content{
+        .el-collapse-item{
+          .el-collapse-item__header{
+            padding: 0 6px;
+            background-color:transparent;
+            color: #ededed;
+            border-bottom:0px solid #ebeef5;
+          }}
+      }
       .el-collapse{
             border-top: 0px solid #ebeef5; 
             border-bottom: 0px solid #ebeef5; 
@@ -121,6 +148,8 @@
           border:0px;
           border-top: 1px solid #ebeef5;
           .el-card__body{
+            // height: 100%;
+            // overflow: auto;
             .el-collapse-item__header{
               background-color: transparent;
               color: #fff;

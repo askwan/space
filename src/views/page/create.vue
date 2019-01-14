@@ -2,7 +2,7 @@
     <div class="create">
     <div class="leader cle">
         <b><b v-if="urlParams">编辑</b><b v-else>创建</b>App</b>
-        <a href="" class="back">我的 App</a>
+        <a href="" class="back">返回大厅</a>
     </div>
     <!-- form -->
     <div class="create-tabs">
@@ -13,28 +13,28 @@
                     <i v-else class="el-icon-plus avatar-uploader-icon article-avatar-icon"></i>
                 </el-upload>
             </el-form-item>
-            <el-form-item label="名称">
+            <el-form-item label="名称" prop="name">
                 <el-input v-model="formLabelAlign.name"></el-input>
             </el-form-item>
             <!-- <el-form-item label="描述">
                 <el-input v-model="formLabelAlign.des"></el-input>
             </el-form-item> -->
-            <el-form-item label="选择ui">
+            <el-form-item label="UI框架">
                 <el-select v-model="formLabelAlign.ui" placeholder="请选择" class="selected">
                     <el-option v-for="item in uis" :key="item.id" :label="item.name||item.id" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="选择场景">
+            <el-form-item label="场景">
                 <el-select v-model="formLabelAlign.view" placeholder="请选择" class="selected">
                     <el-option v-for="item in views" :key="item.id" :label="item.name||item.id" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="选择时空域">
+            <el-form-item label="时空域">
                 <el-select v-model="formLabelAlign.domian" placeholder="请选择" class="selected" clearable>
                     <el-option v-for="item in sDomian" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="所有权">
+            <el-form-item label="访问权限">
             <el-switch
             class="ownerShip"
             v-model="formLabelAlign.ownerShip"
@@ -73,10 +73,10 @@ export default {
           ownerShip:false,
         },
         rules: {
-        //   name: [
-        //     { required: true, message: '请输入app名称', trigger: 'blur' },
-        //     { min: 1, max: 20, message: '不能为空', trigger: 'blur' }
-        //   ],
+          name: [
+            { required: true, message: '请输入app名称', trigger: 'blur' },
+            { min: 1, max: 60, message: '长度不超过60', trigger: 'blur' }
+          ],
         //   abc:[
         //     { required: true, message: '请输入app名称', trigger: 'change' },
         //     // { min: 1, max: 20, message: '不能为空', trigger: 'blur' }
@@ -311,7 +311,7 @@ export default {
           display: block;
       }
       .ownerShip{
-          padding: 23px 0 0 10px;
+          padding: 23px 0 0 4px;
       }
   }
   .article-avatar-up {
@@ -341,11 +341,11 @@ export default {
  }
  .icon2{
     top: 185px;
-    left: 34px;
+    left: 32px;
  }
  .icon3{
      top: 247px;
-     left: 19px;
+     left: 45px;
  }
 }
 

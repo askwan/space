@@ -185,10 +185,22 @@ class SObjectTile {
 
     for (let i in this.primitiveList) {
       let pri = this.primitiveList[i]
-      for (let q = 0; q < pri.length; q++) {
+      let length= pri.length
+      for (let q = 0; q < length; q++) {
         let primitive = pri[q]
         let vid = primitive.sobject.version.vid
-        if (vid * 1000 >= time.nowTime) {
+
+        let nextPrimitive
+        let nextVid
+        if(q<length-1){
+          nextPrimitive=pri[q+1]
+          nextVid = nextPrimitive.sobject.version.vid
+        }else{
+          nextVid = 10000*10000*10000*10000
+
+        }
+
+        if (time.nowTime>=vid * 1000&&time.nowTime<nextVid * 1000) {
           // 计算轨迹坐标与跟随
           if (GlobalData.historyOpen && primitive.trajectory) {
             // primitive.trajectory.countCoordinate(map.nowtime, primitive.primitive)

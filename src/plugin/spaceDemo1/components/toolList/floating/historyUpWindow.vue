@@ -32,7 +32,7 @@ export default {
   data() {
     return {
       GlobalData,
-      timeValue: [new Date(2019, 0, 5, 0), new Date(2019, 0, 12, 0, 0)]
+      timeValue: [new Date(2019, 0,14, 10), new Date(2019, 0, 14, 10, 31)]
     };
   },
   props: {},

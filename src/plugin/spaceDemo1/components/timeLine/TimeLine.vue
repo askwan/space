@@ -19,6 +19,7 @@ export default {
   computed: {},
   watch: {
     "GlobalData.timelineShow"(val) {
+      console.log(11111,val)
       if (val) {
         TimeLineBox.init(map.viewer, "time-line"); // 加载时间轴
 
@@ -32,6 +33,7 @@ export default {
     setTimeout(() => {
       TimeLineBox.init(map.viewer, "time-line"); // 加载时间轴
       TimeLineBox.resize();
+      GlobalData.TimeLineBox=TimeLineBox
     }, 100);
   },
   methods: {}

@@ -11,7 +11,6 @@ class ServerApp extends Base {
       this.url = `${this.host}/onegis/open/space/rest/v0.2.0/datastore/space`;
       // this.url = 'http://192.168.1.133:8083/rest/v0.2.0/datastore/space'
       // this.token = "eyJ1aWQiOjE5MDQ3LCJ0eXAiOiJKV1QiLCJjbGllbnRJZCI6IjIzZDEzYWNlODA3NjQzZTFhMGNlZmViYmNhY2RiNDgzIiwiYWxnIjoiSFMyNTYifQ.eyJuYmYiOjE1NDQ1Nzg0MzcsImlzcyI6Imh0dHA6Ly93d3cuYmx1ZXRoaW5rLmNuIiwidHlwIjoiSldUIiwiZXhwIjoxNTQ0NTg5MjM3LCJhbGciOiJIUzI1NiIsImlhdCI6MTU0NDU3ODQzN30.tLg34On1q-c3UgCFePuZlDMotA7GNNMmilTyvI6xzVU";
-      this.token = sessionStorage.getItem('token')
       
       //web插件
       this.toolsUrl = `${this.host}/onegis/resource/tools/api/v1`
@@ -20,9 +19,12 @@ class ServerApp extends Base {
       this.SDomain = `${this.host}/dae/datastore/rest/v0.1.0/datastore`
       //图片上传
     }
+    getToken(){
+      return sessionStorage.getItem('token');
+    }
     saveApp(options){
       return new Promise((resolve,reject)=>{
-        this.post(`/save?token=${this.token}`,options).then(res=>{
+        this.post(`/save?token=${this.getToken()}`,options).then(res=>{
           resolve(res);
         })
         .then(err=>{
@@ -32,7 +34,7 @@ class ServerApp extends Base {
     }
     deleteApp(id){
         return new Promise((resolve,reject)=>{
-            this.post(`/delete?token=${this.token}&id=${id.id}`,id).then(res=>{
+            this.post(`/delete?token=${this.getToken()}&id=${id.id}`,id).then(res=>{
                 resolve(res);
             })
             .then(err=>{
@@ -66,7 +68,7 @@ class ServerApp extends Base {
             for (var key in options) {
                 str = str + '&' + key + '=' + options[key];
             }
-            axios.get(`${this.toolsUrl}/resource/query?token=${this.token}`+ str)
+            axios.get(`${this.toolsUrl}/resource/query?token=${this.getToken()}`+ str)
               .then(res=>{
                 if(res.status==200){
                   resolve(res.data)
@@ -86,7 +88,7 @@ class ServerApp extends Base {
             for (var key in options) {
                 str = str + '&' + key + '=' + options[key];
             }
-            axios.get(`${this.SDomain}/sdomain/query?token=${this.token}`+ str)
+            axios.get(`${this.SDomain}/sdomain/query?token=${this.getToken()}`+ str)
               .then(res=>{
                 if(res.status==200){
                   resolve(res.data)

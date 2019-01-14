@@ -41,7 +41,7 @@ class PickModel extends ToolEvent {
           this.pickPrimitive = null
           this.pickColor = null
           this.currentSobject(primitive.sobjectForm)
-          map.viewer.scene.render()
+          // map.viewer.scene.render()
         }
 
       } else {}
@@ -53,6 +53,8 @@ class PickModel extends ToolEvent {
       GlobalData.currentSelectObject = ''
       this.currentSobject()
     }
+    map.viewer.scene.render()
+
   }
   // 选中后的对象 
   currentSobject(sobj) {

@@ -58,8 +58,7 @@
           </div>
         </transition>
       </div>
-              <c-measurement :act=measurementAct></c-measurement>
-
+      <c-measurement :act="measurementAct"></c-measurement>
     </div>
   </div>
 </template>
@@ -68,7 +67,7 @@ import map from "../../jscript/cesiumMap/map";
 import toolBarData from "../../jscript/toolData/toolBarData";
 import cMeasurement from "./floating/measurement";
 import cSearch from "./floating/search";
-import globalData from "../../jscript/GlobalData";
+import GlobalData from "../../jscript/GlobalData";
 export default {
   data() {
     return {
@@ -101,14 +100,10 @@ export default {
     },
     setItem(data) {
       if (data.val == "setRelation") {
-        globalData.relationShow = data.show;
+        GlobalData.relationShow = data.show;
+        map.viewer.scene.render();
       }
       if (data.val == "exitHistory") {
-        this.$notify({
-          title: "成功",
-          message: "已退出历史版本",
-          type: "success"
-        });
         this.historyClose();
       }
       // if (data.val == "exitTrajectory") {
@@ -116,9 +111,16 @@ export default {
       // }
     },
     historyClose() {
-      if (globalData.historyOpen == true) {
+      if (GlobalData.historyOpen == true) {
+        this.$notify({
+          title: "成功",
+          message: "已退出历史版本",
+          type: "success"
+        });
         console.log("历史关闭", 666666666);
-        globalData.historyOpen = false;
+        GlobalData.historyOpen = false;
+        GlobalData.timelineShow = false;
+
         map.viewer.scene.render();
       }
     }

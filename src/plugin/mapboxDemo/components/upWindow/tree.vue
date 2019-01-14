@@ -4,19 +4,25 @@
     <div class="object-tree">
       <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
       <el-tree
-        class="filter-tree"
+      class="filter-tree"
         :data="GlobalData.treeList"
         highlight-current
+        node-key="id"
         :props="defaultProps"
         :expand-on-click-node="false"
         ref="tree"
-        @node-click="checkchange"
+        :filter-node-method="filterNode"
         @node-contextmenu="rightEvent"
-        show-checkbox
-        node-key="id"
-        :default-checked-keys="defaultCheckList"
-        @check-change="checkboxchange"
-      ></el-tree>
+      >
+      <span class="filter-tree-con" slot-scope="{node}">
+          <i
+            class="el-icon-view t-icon"
+            :class="{click:!node.checked}"
+            @click="checkboxchange(node)"
+          ></i>
+          <span class="t-con" @click="checkchange(node)">{{node.label}}</span>
+        </span>
+      </el-tree>
       <div
         v-show="showMenu"
         class="location"
@@ -85,36 +91,34 @@ export default {
   created() {},
   mounted() {},
   methods: {
-     checkboxchange(a, b, c) {
-      // console.log(a, b, c);
+    checkboxchange(val) {
+      val.checked = !val.checked;
+      let show = !val.checked;
+      let data = val.data;
+      console.log(val);
       let have = -1;
-      if (b) {
-      } else {
-      }
       GlobalData.disappearSobjectList.forEach((n, i) => {
-        if (n == a.id) {
+        if (n == data.id) {
           have = i;
         }
       });
       if (have >= 0) {
-        if (b) {
+        if (show) {
           GlobalData.disappearSobjectList.splice(have, 1);
-        } else {
         }
       } else {
-        if (b) {
-        } else {
-          GlobalData.disappearSobjectList.push(a.id);
+        if (!show) {
+          GlobalData.disappearSobjectList.push(data.id);
         }
       }
-      // console.log(GlobalData.disappearSobjectList)
     },
-    checkchange(a, b, c) {
-      GlobalData.selectPick = a;
-      console.log(a, b, c);
+   
+    checkchange(val) {
+      GlobalData.selectPick = val.data;
       let obj = {};
       EventBus.fire(MapEvent.LeftClick, obj);
     },
+   
     rightEvent(event, obj, c, d) {
       event.stopPropagation();
       event.preventDefault();
@@ -150,6 +154,20 @@ export default {
   .object-tree {
     height: 100%;
     position: relative;
+    .filter-tree {
+      .filter-tree-con {
+        .t-icon {
+          color: #fff;
+          transition: all linear 0.1s;
+        }
+        .click {
+          color: #409eff;
+        }
+        .t-con {
+          margin-left: 5px;
+        }
+      }
+    }
     .location {
       position: absolute;
       width: 70px;

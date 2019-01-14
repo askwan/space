@@ -2,7 +2,7 @@
     <div class="detail fill">
       <div class="leader pd-small">
         <b>{{config.name}}</b>
-        <a href="" class="back">我的 App</a>
+        <a href="" class="back">返回大厅</a>
         <div class="tab-but">
             <el-button size="mini" type="primary" round plain @click="centerDialogVisible = true">插件</el-button>
             <el-button size="mini" type="primary" round plain @click="savePlguin">保存</el-button>

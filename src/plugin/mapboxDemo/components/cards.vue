@@ -41,6 +41,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 .cards {
+  // overflow-y:auto;
   .box-card {
     // background-color: rgba(47, 53, 60, 0.8);
     background-color: transparent;

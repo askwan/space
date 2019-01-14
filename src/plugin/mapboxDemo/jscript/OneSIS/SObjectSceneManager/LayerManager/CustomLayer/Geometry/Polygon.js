@@ -11,9 +11,7 @@ class Polygon extends publicFun {
     floorObj.name = sobject.name
     floorObj.sobject = sobject
     let obj = this.getDataObj(lonlat, sobject, node)
-if(sobject.name=='-1楼'){
-console.log(obj)
-}
+
     let color = this.getColors(sobject.data)
     let shape = new THREE.Shape(obj.lonlatArr);
 

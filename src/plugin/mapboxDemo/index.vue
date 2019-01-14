@@ -17,9 +17,9 @@
           <el-carousel-item>
             <cardBoxRb :loading="loading"></cardBoxRb>
           </el-carousel-item>
-          <el-carousel-item>
+          <!-- <el-carousel-item>
             <cardBoxRc></cardBoxRc>
-          </el-carousel-item>
+          </el-carousel-item> -->
           <el-carousel-item>
             <cardBoxRd></cardBoxRd>
           </el-carousel-item>

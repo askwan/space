@@ -51,9 +51,7 @@ class Map {
             this.map = new MapboxGL(obj)
             setTimeout(() => {
               this.getColor(fn)
-
             }, 500)
-
           }
         );
       }
@@ -199,6 +197,7 @@ class Map {
         let layer = this.map.allLayer[i]
         if (layer.allSObjectGroup[id]) {
           let group = layer.allSObjectGroup[id]
+          console.log(group,77777777)
           if (this.clickGroup) {
             if (this.clickGroup.children[0] && this.clickGroup.children[0].children[0]) {
               for (let q = 0; q < this.clickGroup.children[0].children.length; q++) {
@@ -242,14 +241,14 @@ class Map {
         let layer = this.map.allLayer[i]
         for (let q in layer.allSObjectGroup) {
           let group = layer.allSObjectGroup[q]
-          let floor = group.sobject.floor ? group.sobject.floor : 0
+          let floor = group.sobject.floor>0 ? group.sobject.floor : 0
           group.position.x += (data.valueX - this.oldData.x) * floor
           group.position.y += (data.valueY - this.oldData.y) * floor
           group.position.z += (data.valueZ - this.oldData.z) * floor
         }
         for (let q in layer.groupP.children) {
           let group = layer.groupP.children[q]
-          let floor = group.sobject.floor ? group.sobject.floor : 0
+          let floor = group.sobject.floor>0 ? group.sobject.floor : 0
           group.position.x += (data.valueX - this.oldData.x) * floor
           group.position.y += (data.valueY - this.oldData.y) * floor
           group.position.z += (data.valueZ - this.oldData.z) * floor

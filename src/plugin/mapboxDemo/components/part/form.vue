@@ -14,7 +14,8 @@
                 <li class="form-li cle" v-show="form.type!=50">
                   <div class="form-name">样式内容:</div>
                   <div class="form-value">
-                    <div class="form-style" v-for="(n,p) in styleForm(form.style)" :key="p">{{p}} : {{n?n:0}}</div>
+                    <!-- <div class="form-style" v-for="(n,p) in styleForm(form.style)" :key="p">{{p}} : {{n?n:0}}</div> -->
+                    <div class="form-style">{{form.style | styleForm()}}</div>
                   </div>
                 </li>
                 <li class="form-li cle" v-show="form.type==50">
@@ -105,6 +106,25 @@ export default {
       //   })
        this.array = this.getNum.formDict
       //  console.log(this.array,105)
+  },
+  filters:{
+    styleForm(val){
+      let emptyArr = []
+      let arr = JSON.parse(val)
+      // console.log(obj,7897890)
+      // console.log(GlobalData.styleList,222222)
+      let styleArr = GlobalData.styleList
+      styleArr.forEach(e=>{
+        arr.forEach(f=>{
+        if(e.id == f){
+          // console.log(e)
+          emptyArr.push(JSON.parse(e.data).paint)
+        }
+        })
+      })
+      // console.log(emptyArr,789789)
+      return emptyArr
+    }
   },
   methods: {
     getData() {

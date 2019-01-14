@@ -17,6 +17,7 @@
 </template>
 <script>
 import GlobalData from "../../jscript/GlobalData";
+import map from '../../jscript/cesiumMap/map'
 export default {
   data() {
     return {
@@ -74,6 +75,7 @@ export default {
           GlobalData.disappearList.push(a.id);
         }
       }
+      map.viewer.scene.render()
 
     }
   }

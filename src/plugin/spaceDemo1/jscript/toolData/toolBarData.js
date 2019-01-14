@@ -33,10 +33,12 @@ toolBarData.setButtonList = [{
   }, {
     name: "综合信息",
     val: "detailUi"
-  }, {
-    name: "模型平移",
-    val: "modelTranslationUi"
-  }],
+  },
+  //  {
+  //   name: "模型平移",
+  //   val: "modelTranslationUi"
+  // }
+],
 
   toolBarData.measurementList = {
     // Spatial: {
