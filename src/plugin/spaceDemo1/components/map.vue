@@ -92,7 +92,14 @@ export default {
         .then(response => {
           console.log("类视图", response.data.data);
           GlobalData.otypeList = response.data.data.list;
-          GlobalData.disappearList = response.data.data.list;
+          GlobalData.otypeList.forEach((n,i)=>{
+            if(n.otypes.length>0){
+              n.otypes.forEach((q,w)=>{
+                GlobalData.disappearList.push(q)
+              })
+            }
+          })
+          // GlobalData.disappearList = response.data.data.list;
           // StyleCtrl.setStyleList(response.data.data.list);
           this.getColor();
           this.getFormDict();

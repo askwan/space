@@ -38,7 +38,7 @@
           'vector-tiles': {
             'type': 'vector',
             'tiles': [
-              `http://bt1.geosts.ac.cn/api/dae/geoservice/rest/v0.1.0/datastore/slave/geoservice/vectortile?row={y}&cols={x}&level={z}&code=3857&serviceType=VectorTile&sdomains=8939901214720`,
+              `http://bt1.geosts.ac.cn/api/dae/geoservice/rest/v0.1.0/datastore/slave/geoservice/vectortile?row={y}&cols={x}&level={z}&code=3857&serviceType=VectorTile&sdomains=461154344960`,
             ],
             'minzoom': 4,
             'maxzoom': 20
@@ -52,7 +52,7 @@
           maxzoom: 22
         }]
       },
-      center: [114.28657510723633, 9.714421615090515],
+      center: [120.433512, 31.324123],
       zoom: 18
       });
 
@@ -63,18 +63,18 @@
       })
 
       mapGL.on('select',(data)=>{
-        console.log('select',data)
+        // console.log('select',data)
       })
-      mapGL.getLayer()
+      
+      mapGL.on('mouseup',data=>{
+        console.log(data,'up')
+      })
 
 
     },
     methods:{
       setcenter(){
         console.log('sdfsfdsdf')
-      },
-      initJs(){
-        
       }
     }
   }
@@ -83,7 +83,4 @@
   .container{
     background-color: #f1f1f1;
   }
-  // #deck-canvas{
-  //   position: absolute;
-  // }
 </style>

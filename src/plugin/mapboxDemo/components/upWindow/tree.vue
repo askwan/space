@@ -12,6 +12,10 @@
         ref="tree"
         @node-click="checkchange"
         @node-contextmenu="rightEvent"
+        show-checkbox
+        node-key="id"
+        :default-checked-keys="defaultCheckList"
+        @check-change="checkboxchange"
       ></el-tree>
       <div
         v-show="showMenu"
@@ -65,7 +69,11 @@ export default {
     }
   },
   components: {},
-  computed: {},
+  computed: {
+    defaultCheckList(){
+      return GlobalData.treeList.map(el => el.id);
+    }
+  },
   watch: {
     loading() {
       // this.data = GlobalData.treeList;
@@ -77,6 +85,30 @@ export default {
   created() {},
   mounted() {},
   methods: {
+     checkboxchange(a, b, c) {
+      // console.log(a, b, c);
+      let have = -1;
+      if (b) {
+      } else {
+      }
+      GlobalData.disappearSobjectList.forEach((n, i) => {
+        if (n == a.id) {
+          have = i;
+        }
+      });
+      if (have >= 0) {
+        if (b) {
+          GlobalData.disappearSobjectList.splice(have, 1);
+        } else {
+        }
+      } else {
+        if (b) {
+        } else {
+          GlobalData.disappearSobjectList.push(a.id);
+        }
+      }
+      // console.log(GlobalData.disappearSobjectList)
+    },
     checkchange(a, b, c) {
       GlobalData.selectPick = a;
       console.log(a, b, c);

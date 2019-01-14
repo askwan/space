@@ -214,13 +214,19 @@ class SObjectTile {
                 }
                 // 类视图列表树控制显示隐藏
                 let otypeId = n.sobject.otype.id
+                let sobjectId = n.sobject.id
                 let show = true
                 // let show = false
-                // GlobalData.disappearList.forEach(q => {
-                //   if (otypeId == q) {
-                //     show = true
-                //   }
-                // })
+                GlobalData.disappearList.forEach(q => {
+                  if (otypeId == q) {
+                    show = false
+                  }
+                })
+                GlobalData.disappearSobjectList.forEach(q => {
+                  if (sobjectId == q) {
+                    show = false
+                  }
+                })
                 if (show) {
                   n.update(frameState)
                 }

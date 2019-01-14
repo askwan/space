@@ -34,6 +34,14 @@
                     <el-option v-for="item in sDomian" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="所有权">
+            <el-switch
+            class="ownerShip"
+            v-model="formLabelAlign.ownerShip"
+            active-text="公有"
+            inactive-text="私有">
+            </el-switch>
+            </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button>
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -61,7 +69,8 @@ export default {
           domian:'',
           des: '',
           list:[],
-          icon:''
+          icon:'',
+          ownerShip:false,
         },
         rules: {
         //   name: [
@@ -99,7 +108,9 @@ export default {
   props: {},
   components: {},
   computed: {},
-  watch:{},
+  watch:{
+
+  },
   created() {},
   mounted() {
 
@@ -128,8 +139,9 @@ export default {
 
       //判断地址栏id
       let appIds = this.$route.query.edit
+      //编辑状态
       if(appIds){
-          //查询
+          //查询 
           let uid = this.userId.id
           serverApp.getApps({uid:uid}).then(res=>{
           // console.log(res);
@@ -141,6 +153,7 @@ export default {
                       this.formLabelAlign.ui = e.layout
                       this.formLabelAlign.view = e.mapView
                       this.formLabelAlign.domian = e.sdomain?e.sdomain.id:''
+                      this.formLabelAlign.ownerShip = e.ownerShip == "PRIVATE" ? false : true
                       this.ImageUrl = e.icon
                       this.formLabelAlign.icon = e.icon
                   }
@@ -173,13 +186,14 @@ export default {
                 mapView:this.formLabelAlign.view,
                 plugins:[],
                 sdomain:{id:this.formLabelAlign.domian,name:this.sDomianName},
-                icon:this.ImageUrl
+                icon:this.ImageUrl,
+                ownerShip: this.formLabelAlign.ownerShip ? "PUBLIC" : "PRIVATE"
             }
             if(this.$route.query.edit){
                 options.id = this.$route.query.edit
             }
             serverApp.saveApp(options).then(res=>{
-                // console.log(res);
+                console.log(res);
                 // window.open('#/detail?new='+res.data.id);
 
                 // this.$router.push({
@@ -216,7 +230,8 @@ export default {
           ui: '',
           view: '',
           des: '',
-          list:[]
+          list:[],
+          ownerShip:false
         }
       },
         //图片上传成功回调方法
@@ -294,6 +309,9 @@ export default {
       position: relative;
       .selected{
           display: block;
+      }
+      .ownerShip{
+          padding: 23px 0 0 10px;
       }
   }
   .article-avatar-up {

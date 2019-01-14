@@ -38,9 +38,6 @@ export default class Operate extends Evented {
       ];
       var features = this.map.queryRenderedFeatures(bbox)
       this.fire('select',{features:features});
-
-      console.log(this.map)
-
     });
 
     this.map.on('load',event=>{
@@ -49,7 +46,11 @@ export default class Operate extends Evented {
 
     this.map.on('mouseup',()=>{
       // var bbox = [[-79, 43], [-73, 45]];
-    })
+      this.fire('mouseup',{
+        center:this.getCenter()
+      })
+    });
+
   }
   getCenter(){
     return this.map.getCenter();

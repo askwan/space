@@ -9,6 +9,8 @@ let GlobalData={
 
   selectPick:"",
 
-  formDict:""
+  formDict:"",
+
+  disappearSobjectList:[]//消失对象集合
 }
 export default GlobalData

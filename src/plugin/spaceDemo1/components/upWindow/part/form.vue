@@ -14,7 +14,8 @@
                 <li class="form-li cle" v-show="form.type!=50">
                   <div class="form-name">样式内容:</div>
                   <div class="form-value">
-                    <div class="form-style" v-for="(n,p) in styleForm(form.style)" :key="p">{{p}} : {{n?n:0}}</div>
+                    <!-- <div class="form-style" v-for="(n,p) in styleForm(form.style)" :key="p">{{p}} : {{n?n:0}}</div> -->
+                    <div class="form-style">{{form.style | styleForm()}}</div>
                   </div>
                 </li>
                 <li class="form-li cle" v-show="form.type==50">
@@ -72,6 +73,25 @@ export default {
   },
   props: {},
   components: {},
+  filters:{
+    styleForm(val){
+      let emptyArr = []
+      let arr = JSON.parse(val)
+      // console.log(obj,7897890)
+      // console.log(GlobalData.styleList,222222)
+      let styleArr = GlobalData.styleList
+      styleArr.forEach(e=>{
+        arr.forEach(f=>{
+        if(e.id == f){
+          console.log(e)
+          emptyArr.push(JSON.parse(e.data).paint)
+        }
+        })
+      })
+      console.log(emptyArr,789789)
+      return emptyArr
+    }
+  },
   computed: {
     formList() {
       let arr = this.list
@@ -81,6 +101,7 @@ export default {
         this.$set(el, "checked", true);
         return el;
       });
+      console.log(arr)
       return arr;
     },
     dict() {
@@ -103,6 +124,7 @@ export default {
     getData() {
       this.array = this.getNum.formDict
       this.list = this.getNum.currentSelectObject.forms
+      console.log(this.list)
     },
 
     transForm(type){
@@ -114,31 +136,31 @@ export default {
         }
     },
 
-    styleForm(val) {
-      if (val) {
-        let obj = {
-            orderType: 'ID',
-            descOrAsc: true
-        }
-        try {
-          let arr = JSON.parse(val);
-          let re;
-          arr.forEach((q, p) => {
-            if (q instanceof Object) {
-              re = q;
-            } else if (q instanceof Array) {
-            } else {
-              this.style.forEach((n, i) => {
-                if (n.id == q) {
-                  re = JSON.parse(n.data).paint;
-                }
-              });
-            }
-          });
-          return re;
-        } catch (err) {}
-      }
-    }
+    // styleForm(val) {
+    //   if (val) {
+    //     let obj = {
+    //         orderType: 'ID',
+    //         descOrAsc: true
+    //     }
+    //     try {
+    //       let arr = JSON.parse(val);
+    //       let re;
+    //       arr.forEach((q, p) => {
+    //         if (q instanceof Object) {
+    //           re = q;
+    //         } else if (q instanceof Array) {
+    //         } else {
+    //           this.style.forEach((n, i) => {
+    //             if (n.id == q) {
+    //               re = JSON.parse(n.data).paint;
+    //             }
+    //           });
+    //         }
+    //       });
+    //       return re;
+    //     } catch (err) {}
+    //   }
+    // }
   }
 };
 </script>

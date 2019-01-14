@@ -10,6 +10,8 @@ let GlobalData = {
   queryReady: false, //请求是否完毕
 
   sobjectDatalist: [], //总数据
+  sobjectTreelist: [], //总数据
+  disappearSobjectList: [], //消失对象集合
 
   otypeList: [], //类试图
   disappearList: [], //消失类视图集合

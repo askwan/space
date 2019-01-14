@@ -9,6 +9,12 @@
       </div>
       <!-- content -->
       <div class="content">
+        <!-- tab页 -->
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="公有应用" name="public"></el-tab-pane>
+        <el-tab-pane label="我的应用" name="own"></el-tab-pane>
+      </el-tabs>
+      
         <!-- 列表 -->
         <el-row>
           <!-- <el-col :span="2">
@@ -26,8 +32,9 @@
                       <div class="ember-view float-left"><img :src="app.icon" v-if="app.icon"><img v-else src="./assets/images/img.png"></div>
                       <div class="app-info float-left">
                         <h5 :title="app.name">{{app.name | cutName()}}</h5>
-                        <!-- <h6>描述</h6> -->
+                        <h6>所有权:<span>{{app.ownerShip}}</span></h6>
                       </div>
+
                     </div>
                     <div class="center-card">
                       <div class="app-tags">
@@ -55,8 +62,8 @@
                     </div>
 
                       <div class="mask">
-                          <i class="el-icon-edit" title="编辑插件" @click="edit(app)"></i>
-                          <i class="el-icon-view" title="预览" @click="view(app)"></i><i class="el-icon-edit-outline" title="编辑app" @click="editApp(app)"></i><i class="el-icon-delete" title="删除" @click="delet(app)"></i>
+                          <i class="el-icon-edit" title="编辑插件" @click="edit(app)" v-if="app.uid == userId.id"></i>
+                          <i class="el-icon-view" title="预览" @click="view(app)"></i><i class="el-icon-edit-outline" title="编辑app" @click="editApp(app)" v-if="app.uid == userId.id"></i><i class="el-icon-delete" title="删除" @click="delet(app)" v-if="app.uid == userId.id"></i>
                       </div>
                   </li>
 
@@ -77,42 +84,29 @@ export default {
   data() {
     return {
       show:false,
-      lists:[]
+      lists:[],
+      activeName: 'public',
+      params:{},
+      userId:userMgr.getUser(),
+      publicApp:[],
+      ownApp:[]
     };
   },
   props: {},
   components: {},
   computed: {
-   
   },
   watch:{},
   created() {},
   mounted() {
-    let userObj = userMgr.getUser()
-    let uid = userObj.id
-    serverApp.getApps({uid:uid}).then(res=>{
-      // console.log(res);
-     if(res.status==200){
-       let lists = [];
-       console.log(res.data,"data")
-        this.lists = res.data.reverse();
-        this.lists.forEach(el=>{
-          lists.push(el.layout);
-          lists.push(el.mapView);
-          el.plugins = el.plugins ||[]
-          el.plugins.forEach(ev=>{
-            lists.push(ev.name);
-          });
-        })
-        // console.log(lists,55555);
-        // readyServer.loadSource({lists:lists}).then(res=>{
-        //   console.log(res,'loadServer');
-        // });
-        pluginServer.query({type:2}).then(res=>{
-          console.log(res);
-        })
-     }
-    })
+    
+    // ownerShip:"private"
+    // this.params.ownerShip = "PUBLIC"
+    this.getApps({ownerShip:"PUBLIC"})
+    let uid = this.userId.id
+    this.params.uid = uid
+    this.getApps({uid:uid})
+
   },
   filters:{
     editTime(timestamp){
@@ -132,8 +126,68 @@ export default {
           return txt;
         }
       },
+    // power(val){
+    // }
   },
   methods: {
+    //请求
+    getApps(param){
+     
+      serverApp.getApps(param).then(res=>{
+      // console.log(res);
+     if(res.status==200){
+       let lists = [];
+      //  console.log(res.data,"data")
+        // this.lists = res.data.reverse();
+
+        if(param.ownerShip){
+          this.publicApp = res.data.reverse();
+          this.lists = this.publicApp
+
+        }else{
+          this.ownApp = res.data.reverse();
+        }
+        // this.lists.forEach(el=>{
+        //   lists.push(el.layout);
+        //   lists.push(el.mapView);
+        //   el.plugins = el.plugins ||[]
+        //   el.plugins.forEach(ev=>{
+        //     lists.push(ev.name);
+        //   });
+        // })
+
+        // console.log(lists,55555);
+        // readyServer.loadSource({lists:lists}).then(res=>{
+        //   console.log(res,'loadServer');
+        // });
+        pluginServer.query({type:2}).then(res=>{
+          console.log(res);
+        })
+     }
+    })
+     
+    },
+    handleClick(tab, event) {
+        // console.log(tab);
+        if(tab.name == "public"){
+          // //清空对象
+          // for(var key in this.params){
+          //   delete this.params[key]
+          // }
+          // this.params.ownerShip = "PUBLIC"
+          // this.getApps(this.params)
+          this.lists = this.publicApp
+        }else{
+          this.lists = this.ownApp
+          // for(var key in this.params){
+          //   delete this.params[key]
+          // }
+          // // let userObj = userMgr.getUser()
+          // let uid = this.userId.id
+          // this.params.uid = uid
+          // this.getApps(this.params)
+        }
+      },
     view(app){
      window.open('#/view?app='+ app.id)
     },
@@ -193,8 +247,9 @@ export default {
 .home{
   width: 1200px;
   margin: 0 auto;
-  height: 1000px;
-  background-color: #f8f8f8;
+  height:100%;
+  background-color: #f8f8f8; 
+  // background-color: transparent;
   .cle:after {
     content: " ";
     display: block;
@@ -239,6 +294,9 @@ export default {
     overflow-y: auto;
   }
   // content
+  .content{
+    padding:0 20px;
+  }
    .tab-title {
         font-size: 1rem;
         line-height: 1.55rem;
@@ -266,6 +324,13 @@ export default {
       width: 1000px;
       .app-info{
         margin:10px 14px;
+        &>h6,span{
+          padding-top: 10px;
+          color: #808080;
+          font-size: 12px;
+          font-weight: 400;
+         
+        }
       }
       .item-card{
         width: 232px;

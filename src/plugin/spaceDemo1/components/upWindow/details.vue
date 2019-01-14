@@ -72,5 +72,6 @@ export default {
   right: 0;
   overflow-y: hidden;
   overflow-x: hidden;
+
 }
 </style>

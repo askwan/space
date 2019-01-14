@@ -23,17 +23,22 @@ export default {
 <style lang='scss' scoped>
 .inmap-loading {
   position: absolute;
-  bottom: 10px;
-  left: 50%;
-  width: 30px;
-  height: 30px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  background-color: rgba(143, 174, 197, 0.3);
   .i-loading {
+    margin-top: 400px;
+    width: 40px;
+    height: 40px;
     transition: all linear 0.1s;
-    font-size: 24px;
+    font-size: 40px;
     color: #ffe200;
   }
 }
- .location-show {
-    bottom: 110px;
-  }
+.location-show {
+  bottom: 110px;
+}
 </style>

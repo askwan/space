@@ -5,7 +5,7 @@ import Line from './Geometry/Line'
 import Polygon from './Geometry/Polygon'
 import MultiPolygon from './Geometry/MultiPolygon'
 import Model from './Geometry/Model'
-
+import GlobalData from '../../../../GlobalData'
 class PublicLayer {
   constructor() {
     this.id = 'public';
@@ -33,6 +33,8 @@ class PublicLayer {
 
     this.cGeometry = {} //所有的几何类型
     this.show = true
+
+    this.concealGroup = {} //隐藏
 
     this.lamplight()
     this.init()
@@ -218,7 +220,7 @@ class PublicLayer {
     //改变的
     this.transition(gl, matrix, mapCenter, translate, this.group)
     this.transition(gl, matrix, mapCenter, translate, this.groupP)
-
+    this.showOrNot()
     this.camera.projectionMatrix.elements = matrix;
     this.camera.projectionMatrix = m.multiply(l);
 
@@ -229,6 +231,36 @@ class PublicLayer {
     this.rendererP.setSize(this.renderer.domElement.width, this.renderer.domElement.height);
     this.pickingTexture.setSize(this.renderer.domElement.width, this.renderer.domElement.height);
     // this.map.triggerRepaint();
+  }
+  showOrNot() {
+    if (this.group && this.group.children && this.group.children.length > 0) {
+
+      GlobalData.disappearSobjectList.forEach((q, w) => {
+
+        if (this.allSObjectGroup[q]) {
+          if (this.allSObjectGroup[q].visible) {
+            this.allSObjectGroup[q].visible = false
+            this.concealGroup[q] = q
+          }
+        }
+      })
+
+      for (let i in this.concealGroup) {
+        let g = this.concealGroup[i]
+        let have = false
+        GlobalData.disappearSobjectList.forEach((q, w) => {
+          if (g == q) {
+            have = true
+          }
+        })
+        if (!have) {
+          this.allSObjectGroup[g].visible = true
+
+        }
+      }
+
+    }
+    this.update()
   }
   pick(mouse) {
     if (mouse) {

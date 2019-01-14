@@ -7,10 +7,10 @@ import SObjectTile from '../manageData/SObjectTile'
 import Sobject from '../Sobject'
 
 
-// const psdeHost = "http://bt1.geosts.ac.cn/api/dae/datastore";
-// const psdeUrl = psdeHost + "/rest/v0.1.0/datastore/";
+const psdeHost = "http://bt1.geosts.ac.cn/api/dae/datastore";
+const psdeUrl = psdeHost + "/rest/v0.1.0/datastore/";
 
-const psdeUrl = "http://192.168.1.133:8001/rest/v0.1.0/datastore";
+// const psdeUrl = "http://192.168.1.133:8001/rest/v0.1.0/datastore";
 /**
 历史数据集
  */

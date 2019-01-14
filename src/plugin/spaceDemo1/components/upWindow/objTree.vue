@@ -1,18 +1,22 @@
 
 <template>
-  <div class="objectUi" >
+  <div class="objectUi" v-if="GlobalData.sobjectTreelist.length>0">
     <div class="object-tree">
       <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
       <el-tree
         class="filter-tree"
         :data="GlobalData.sobjectTreelist"
         highlight-current
+        show-checkbox
+        node-key="id"
         :props="defaultProps"
         :expand-on-click-node="false"
         ref="tree"
         :filter-node-method="filterNode"
         @node-click="checkchange"
         @node-contextmenu="rightEvent"
+        :default-checked-keys="defaultCheckList"
+        @check-change="checkboxchange"
       ></el-tree>
       <div
         v-show="showMenu"
@@ -25,21 +29,22 @@
   </div>
   <!-- <div  class="loading">
     <i class="el-icon-loading"></i>
-  </div> -->
+  </div>-->
 </template>
 <script>
 // import "../../assets/public.scss";
 import GlobalData from "../../jscript/GlobalData";
 // import { EventBus, MapEvent } from "../../jscript/event/Event.js";
-import map from '../../jscript/cesiumMap/map'
+import map from "../../jscript/cesiumMap/map";
 let timer;
 // let data;
 export default {
   data() {
     return {
       GlobalData,
-    //   data: [],
-      array:[],
+      // defaultCheckList: [],
+
+      array: [],
       filterText: "",
       defaultProps: {
         children: "children",
@@ -67,23 +72,50 @@ export default {
     }
   },
   components: {},
-  computed: {},
+  computed: {
+    defaultCheckList(){
+      return GlobalData.sobjectTreelist.map(el => el.id);
+    }
+  },
   watch: {
     loading() {
-    //   this.data = GlobalData.treeList;
+      //   this.data = GlobalData.treeList;
     },
     filterText(val) {
-      console.log(val)
+      console.log(val);
       this.$refs.tree.filter(val);
-    },
+    }
   },
   created() {},
   mounted() {
-      console.log(this.data)
+    // this.defaultCheckList = GlobalData.sobjectTreelist.map(el => el.id);
   },
   methods: {
+    checkboxchange(a, b, c) {
+      console.log(a, b, c);
+      let have = -1;
+      if (b) {
+      } else {
+      }
+      GlobalData.disappearSobjectList.forEach((n, i) => {
+        if (n == a.id) {
+          have = i;
+        }
+      });
+      if (have >= 0) {
+        if (b) {
+          GlobalData.disappearSobjectList.splice(have, 1);
+        } else {
+        }
+      } else {
+        if (b) {
+        } else {
+          GlobalData.disappearSobjectList.push(a.id);
+        }
+      }
+    },
     checkchange(a, b, c) {
-    //   GlobalData.selectPick = a;
+      //   GlobalData.selectPick = a;
       console.log(a, b, c);
       GlobalData.currentSelectObjectId = a.id;
       GlobalData.currentSelectObject = a;
@@ -104,7 +136,7 @@ export default {
       }, 3000);
     },
     selectMenu() {
-     this.showMenu = false;
+      this.showMenu = false;
       let geoBox = GlobalData.selectPick.geoBox;
       if (geoBox.maxx == geoBox.minx && geoBox.maxy == geoBox.miny) {
         map.viewer.camera.flyTo({
