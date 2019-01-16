@@ -10,20 +10,26 @@
       <el-slider v-model="valueZ" show-input @change="changeNum"></el-slider>
     </div>
     <div class="reset-btn" @click="reset">重置</div>
+    <div class="open">
+      <span>鼠标点击是否获取整个模型：</span>
+      <el-switch v-model="open" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+    </div>
   </div>
   <!-- <div v-else class="loading">
     <i class="el-icon-loading"></i>
-  </div> -->
+  </div>-->
 </template>
 <script>
-// import { EventBus, MapEvent } from "../../jscript/event/Event.js";
-
+import GlobalData from "../../jscript/GlobalData";
+import map from '../../jscript/cesiumMap/map'
 export default {
   data() {
     return {
       valueX: 50,
       valueY: 50,
-      valueZ: 50
+      valueZ: 50,
+
+      open: true
     };
   },
   props: {
@@ -33,23 +39,30 @@ export default {
   },
   components: {},
   computed: {},
-  watch: {},
+  watch: {
+    open(val) {
+      GlobalData.pickModelNode = val;
+      // console.log(val);
+      // console.log(GlobalData.pickModelNode);
+    }
+  },
   created() {},
   mounted() {},
   methods: {
     changeNum() {
       let obj = {
-        valueX: this.valueX,
-        valueY: this.valueY,
-        valueZ: this.valueZ
+        x: this.valueX,
+        y: this.valueY,
+        z: this.valueZ
       };
-    //   EventBus.fire(MapEvent.sliderChange, obj);
+      GlobalData.pickModelTranslation = obj;
+      map.viewer.scene.render()
     },
     reset() {
       this.valueX = 50;
       this.valueY = 50;
       this.valueZ = 50;
-      this.changeNum()
+      this.changeNum();
     }
   }
 };

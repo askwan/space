@@ -2,10 +2,15 @@
   <div id="app" class="fill">
     <div id="nav" v-if="show" >
       <nav-header v-if="!$route.path.includes('/token')"></nav-header>
+      <!-- <nav-header></nav-header> -->
+
     </div>
     <!-- <div><canvas id="J_dotLine" style="background-color: rgba(204, 201, 201, 0.726);"></canvas></div> -->
     <!-- <div class="canv"><canvas id="J_dotLine" style="background-color: #f8f8f8;width:100%;height:100%"></canvas></div> -->
-
+<!-- <canvas
+        id="J_dotLine"
+        style="background-color: rgba(204, 201, 201, 0.726);width:100%;height:100%"
+      ></canvas> -->
     <div class="app-content" :class="show?height:''">
       <router-view/>
     </div>
@@ -27,6 +32,8 @@ import {ucOnegis} from "@/server/newUrl.js"
       'nav-header':()=>import('@/components/header')
     },
     mounted() {
+      // background.start()
+
       this.ucOnegi = ucOnegis + window.location.href;
       // console.log(this.ucOnegi)
       // this.$router.go(this.ucOnegi);
@@ -35,7 +42,6 @@ import {ucOnegis} from "@/server/newUrl.js"
       if(num != -1){
         this.show = false
       };
-      // background.start()
     },
   }
 </script>

@@ -75,6 +75,7 @@ class Map {
       });
   }
   getColor(fn) {
+    console.log('请求开始')
     let url = psdeUrl + '/oformstyle/query'
     axios.get(url, {
         params: {

@@ -34,10 +34,10 @@ toolBarData.setButtonList = [{
     name: "综合信息",
     val: "detailUi"
   },
-  //  {
-  //   name: "模型平移",
-  //   val: "modelTranslationUi"
-  // }
+   {
+    name: "模型平移",
+    val: "modelTranslationUi"
+  }
 ],
 
   toolBarData.measurementList = {
@@ -102,7 +102,7 @@ toolBarData.measurementClear = () => {
 }
 
 toolBarData.fun = (name, _this) => {
-  console.log(name, _this)
+  // console.log(name, _this)
 
   let obj = {
     name: name,

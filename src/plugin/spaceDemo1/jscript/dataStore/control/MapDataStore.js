@@ -20,7 +20,7 @@ class MapDataStore {
 
   update(frameState) {
     // 对场景内的切片进行调度
-    if (!GlobalData.historyOpen &&this.sobjectData) {
+    if (!GlobalData.historyOpen && this.sobjectData) {
       this.SObjectAll.update(frameState)
     }
   }

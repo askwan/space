@@ -32,7 +32,8 @@ class SObjectFormModel {
     }
   }
   modelTranslation() {
-    if (!GlobalData.pickModelNode && GlobalData.pickModelId == this.id) {
+    // if (!GlobalData.pickModelNode && (GlobalData.pickModelId == this.id||GlobalData.currentSelectObjectId==this.id)) {
+      if (GlobalData.pickModelId == this.id||GlobalData.currentSelectObjectId==this.id) {
       let lv = 0
       for (let i in this.nodeRelation) {
         let nodes = this.nodeRelation[i]
@@ -98,7 +99,7 @@ class SObjectFormModel {
       modelMatrix: modelMatrix,
       // scale: 100,
       scale: parseFloat(style.scale ? style.scale : 1),
-      // minimumPixelSize: parseFloat(style.smallPX ? style.smallPX : 50),
+      minimumPixelSize: parseFloat(style.smallPX ? style.smallPX : 0),
       // minimumPixelSize: 100,
       id: this.sobject.id + '-' + this.sobject.uuid
     })

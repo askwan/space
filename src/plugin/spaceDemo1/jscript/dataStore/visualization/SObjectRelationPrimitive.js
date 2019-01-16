@@ -1,4 +1,4 @@
-// import historyDataStroe from '../control/HistoryDataStroe'
+import historyDataStroe from '../control/HistoryDataStroe'
 import mapDataStore from '../control/MapDataStore'
 import GlobalData from "../../GlobalData";
 
@@ -20,15 +20,15 @@ class SObjectRelationPrimitive {
 
   update(frameState) {
     if (this.polylineCollection) {
-      for (let i = 0; i < this.polylineCollection._polylines.length; i++) {
-        let model = this.polylineCollection._polylines[i]
-        let arr = this.getPosition(i)
-        if (arr && arr.length > 0) {
-          model.positions = Cesium.Cartesian3.fromDegreesArrayHeights(this.getPosition(i))
-        } else {
-          return
-        }
-      }
+      // for (let i = 0; i < this.polylineCollection._polylines.length; i++) {
+      //   let model = this.polylineCollection._polylines[i]
+      //   let arr = this.getPosition(i)
+      //   if (arr && arr.length > 0) {
+      //     model.positions = Cesium.Cartesian3.fromDegreesArrayHeights(this.getPosition(i))
+      //   } else {
+      //     return
+      //   }
+      // }
       this.polylineCollection.update(frameState)
     }
   }
@@ -40,6 +40,12 @@ class SObjectRelationPrimitive {
     let pt2 = []
     let ronode = this.sobject.network.nodes[i]
     if (GlobalData.historyOpen) {
+     let list=historyDataStroe.SObjectAll.sobjectAll[ronode.relatedObjectId]
+for(let i=0;i<list.length;i++){
+  let sobject = list[i]
+
+  pt2 = sobject.getSobjectNowPosition()
+}
       let version = historyDataStroe.versionAll[GlobalData.versionId]
       if (version.sobjectTiles) {
         for (let i in version.sobjectTiles) {

@@ -7,7 +7,7 @@ import SObjectFormServer from '../visualization/SObjectFormServer.js'
 
 import SObjectRelationPrimitive from '../visualization/SObjectRelationPrimitive'
 import SObjectTrajectory from '../visualization/SObjectTrajectory.js'
-
+import BehaviorPrimitive from '../visualization/BehaviorControl.js'
 
 import {
   EventAll,
@@ -116,11 +116,17 @@ class SObjectTile {
     // if (GlobalData.historyOpen) {
     //   trajectory = new SObjectTrajectory(sobject,this.parameter.geoWkt)
     // }
+    let behavior;
+    if(sobject.otype.id==7126){
+      behavior = new BehaviorPrimitive(sobject);
+    }
+
     pri = {
       primitive: primitive,
       sobject: sobject,
       trajectory: trajectory,
-      relation: relation
+      relation: relation,
+      behavior:behavior
     }
     this.primitiveList[sobject.id].push(pri)
   }

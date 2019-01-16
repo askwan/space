@@ -1,9 +1,20 @@
-body{
+body {
   min-width: 1200px;
   overflow-x: auto;
 }
 
-::-webkit-scrollbar, ::-webkit-scrollbar-track-piece {
+::-webkit-scrollbar,
+::-webkit-scrollbar-track-piece {
   width: 5px;
   background-color: #ededed;
+}
+
+.home .content .con .el-tabs--top {
+  .el-tabs__header {
+    padding: 0 20px;
+  }
+
+  .el-tabs__content {
+    padding: 0 20px;
+  }
 }

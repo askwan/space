@@ -10,7 +10,6 @@ class ServerApp extends Base {
 
       this.url = `${this.host}/onegis/open/space/rest/v0.2.0/datastore/space`;
       // this.url = 'http://192.168.1.133:8083/rest/v0.2.0/datastore/space'
-      // this.token = "eyJ1aWQiOjE5MDQ3LCJ0eXAiOiJKV1QiLCJjbGllbnRJZCI6IjIzZDEzYWNlODA3NjQzZTFhMGNlZmViYmNhY2RiNDgzIiwiYWxnIjoiSFMyNTYifQ.eyJuYmYiOjE1NDQ1Nzg0MzcsImlzcyI6Imh0dHA6Ly93d3cuYmx1ZXRoaW5rLmNuIiwidHlwIjoiSldUIiwiZXhwIjoxNTQ0NTg5MjM3LCJhbGciOiJIUzI1NiIsImlhdCI6MTU0NDU3ODQzN30.tLg34On1q-c3UgCFePuZlDMotA7GNNMmilTyvI6xzVU";
       
       //web插件
       this.toolsUrl = `${this.host}/onegis/resource/tools/api/v1`

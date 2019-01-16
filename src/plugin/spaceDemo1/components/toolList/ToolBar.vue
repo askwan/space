@@ -118,9 +118,17 @@ export default {
           type: "success"
         });
         console.log("历史关闭", 666666666);
+        map.clock.clock.startTime = Cesium.JulianDate.fromDate(
+          new Date()
+        ).clone();
+        map.clock.clock.currentTime = Cesium.JulianDate.fromDate(
+          new Date()
+        ).clone();
+        map.clock.clock.stopTime = Cesium.JulianDate.fromDate(
+          new Date()
+        ).clone();
         GlobalData.historyOpen = false;
         GlobalData.timelineShow = false;
-
         map.viewer.scene.render();
       }
     }

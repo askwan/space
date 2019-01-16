@@ -1,6 +1,4 @@
-// import left from "../js/left.js";
-// import right from "../js/right.js";
-// import middle from "../js/middle.js";
+
 import object from "../../components/upWindow/objTree.vue";
 import tree from "../../components/upWindow/classViewList.vue";
 import history from "../../components/upWindow/history.vue";
@@ -29,9 +27,7 @@ class DragUiData {
       width: 300,
       height: 500,
     };
-    // if(this.name!=='middle'){
-    //   uiFunction.updated({name:this.name,left:this.left})
-    // }
+   
   }
 }
 /**

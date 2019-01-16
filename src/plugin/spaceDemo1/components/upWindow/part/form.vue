@@ -83,12 +83,12 @@ export default {
       styleArr.forEach(e=>{
         arr.forEach(f=>{
         if(e.id == f){
-          console.log(e)
+          // console.log(e)
           emptyArr.push(JSON.parse(e.data).paint)
         }
         })
       })
-      console.log(emptyArr,789789)
+      // console.log(emptyArr,789789)
       return emptyArr
     }
   },
@@ -101,7 +101,7 @@ export default {
         this.$set(el, "checked", true);
         return el;
       });
-      console.log(arr)
+      // console.log(arr)
       return arr;
     },
     dict() {
@@ -124,7 +124,7 @@ export default {
     getData() {
       this.array = this.getNum.formDict
       this.list = this.getNum.currentSelectObject.forms
-      console.log(this.list)
+      // console.log(this.list)
     },
 
     transForm(type){

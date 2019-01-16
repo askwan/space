@@ -92,13 +92,13 @@ export default {
         .then(response => {
           console.log("类视图", response.data.data);
           GlobalData.otypeList = response.data.data.list;
-          GlobalData.otypeList.forEach((n,i)=>{
-            if(n.otypes.length>0){
-              n.otypes.forEach((q,w)=>{
-                GlobalData.disappearList.push(q)
-              })
+          GlobalData.otypeList.forEach((n, i) => {
+            if (n.otypes.length > 0) {
+              n.otypes.forEach((q, w) => {
+                GlobalData.disappearList.push(q);
+              });
             }
-          })
+          });
           // GlobalData.disappearList = response.data.data.list;
           // StyleCtrl.setStyleList(response.data.data.list);
           this.getColor();
@@ -196,7 +196,8 @@ export default {
         }
       });
       this.recursion(child, parents);
-      GlobalData.sobjectTreelist=parents;
+      this.sortUp(parents);
+      GlobalData.sobjectTreelist = parents;
     },
     recursion(child, parents) {
       if (parents.length > 0) {
@@ -209,6 +210,23 @@ export default {
           this.recursion(child, n.children);
         });
       }
+    },
+    sortUp(list) {
+      // console.log(list);
+      list.forEach(sobj => {
+        if (sobj.children && sobj.children.length > 0) {
+          let child = [];
+          sobj.children.forEach((n, i, arr) => {
+            if (n.children.length > 0) {
+              child.unshift(n);
+            } else {
+              child.push(n);
+            }
+          });
+          sobj.children = child;
+          this.sortUp(child);
+        }
+      });
     }
   }
 };

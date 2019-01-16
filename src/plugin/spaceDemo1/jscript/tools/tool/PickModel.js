@@ -36,12 +36,12 @@ class PickModel extends ToolEvent {
             this.pickColor = ModelMaterial.getValue('baseColorFactor').clone()
             ModelMaterial.setValue('baseColorFactor', new Cesium.Cartesian4(1.0, 0.0, 0.0, 1.0));
           }
-
+          map.viewer.scene.render()
         } else {
           this.pickPrimitive = null
           this.pickColor = null
           this.currentSobject(primitive.sobjectForm)
-          // map.viewer.scene.render()
+          map.viewer.scene.render()
         }
 
       } else {}
@@ -52,8 +52,9 @@ class PickModel extends ToolEvent {
       GlobalData.currentSelectObjectId = ''
       GlobalData.currentSelectObject = ''
       this.currentSobject()
+      map.viewer.scene.render()
+
     }
-    map.viewer.scene.render()
 
   }
   // 选中后的对象 

@@ -45,9 +45,9 @@ export default {
       import("./components/toolList/floating/historyUpWindow.vue"),
     CLoading: () => import("./components/widget/loading.vue"),
 
-    moveBox: () => import("./components/upWindow/MoveBox.vue"),
+    moveBox: () => import("./components/MoveBox/MoveBox.vue"),
 
-    tree: () => import("./components/upWindow/objTree.vue")
+    // tree: () => import("./components/upWindow/objTree.vue")
   },
   computed: {
     bodyWidths() {

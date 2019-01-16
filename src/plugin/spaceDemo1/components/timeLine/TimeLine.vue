@@ -19,7 +19,6 @@ export default {
   computed: {},
   watch: {
     "GlobalData.timelineShow"(val) {
-      console.log(11111,val)
       if (val) {
         TimeLineBox.init(map.viewer, "time-line"); // 加载时间轴
 

@@ -30,7 +30,8 @@ class Map {
       clock: clock,
       timeline: false, // 是否显示时间轴 
       animation: false, // 是否创建动画小器件，左下角仪表 
-      requestRenderMode: true, // 启用请求渲染模式
+      // requestRenderMode: false, // 启用请求渲染模式
+      requestRenderMode: false, // 启用请求渲染模式
       scene3DOnly: true, // 如果设置为true，则所有几何图形以3D模式绘制以节约GPU资源 
       navigationHelpButton: false, // 是否显示右上角的帮助按钮 
       navigationInstructionsInitiallyVisible: false,

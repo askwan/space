@@ -54,13 +54,15 @@
       },
       center: [120.433512, 31.324123],
       zoom: 18
+      },()=>{
+        axios.get('http://bt1.geosts.ac.cn/api/dae/geoservice/rest/v0.1.0/datastore/slave/geoservice/stylePreview/sourceLayers').then(res=>{
+          res.data.forEach(layer=>{
+            mapGL.addLayer(layer);
+          });
+        });
       });
 
-      axios.get('http://bt1.geosts.ac.cn/api/dae/geoservice/rest/v0.1.0/datastore/slave/geoservice/stylePreview/sourceLayers').then(res=>{
-        res.data.forEach(layer=>{
-          mapGL.addLayer(layer);
-        })
-      })
+      
 
       mapGL.on('select',(data)=>{
         // console.log('select',data)
