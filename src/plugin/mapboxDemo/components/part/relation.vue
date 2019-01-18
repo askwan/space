@@ -76,11 +76,14 @@ export default {
   methods: {
     getKeysName(keys, otItem) {
       var name = keys;
-      otItem.edge.relation.fields.fields.forEach((item, index) => {
+      let array = otItem.edge.relation.fields.fields || []
+      array.forEach((item, index) => {
         if (item.name == keys) {
           name = item.caption;
         }
       });
+
+
       return name;
     },
     filterAction(data) {
@@ -120,6 +123,9 @@ export default {
     //关系对象
     addRelationList(data) {
       this.relationList = [];
+      if(!data){
+        data = []
+      }
       data.forEach((item, index) => {
         var str = JSON.stringify(item.edge.relation);
         var strObj = JSON.parse(str);
@@ -145,12 +151,14 @@ export default {
         ) {
           if (JSON.stringify(otItem.properties) == "{}" || !otItem.properties) {
             otItem.properties = {};
-            otItem.edge.relation.fields.fields.forEach(item => {
+            let arr = otItem.edge.relation.fields.fields || []
+            arr.forEach(item => {
               var name = item.name.toString();
               otItem.properties[name] = "";
             });
           } else {
-            otItem.edge.relation.fields.fields.forEach(item => {
+            let array = otItem.edge.relation.fields.fields || []
+            array.forEach(item => {
               var name = item.name.toString();
               if (item.nameValue) {
                 otItem.properties[name] = item.nameValue;

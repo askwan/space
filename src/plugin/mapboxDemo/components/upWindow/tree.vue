@@ -97,6 +97,9 @@ export default {
       let data = val.data;
       console.log(val);
       let have = -1;
+      if(!GlobalData.disappearSobjectList){
+        GlobalData.disappearSobjectList = []
+      }
       GlobalData.disappearSobjectList.forEach((n, i) => {
         if (n == data.id) {
           have = i;
@@ -126,11 +129,11 @@ export default {
       this.showMenu = true;
       console.log(event, obj);
 
-      this.posi.x = event.clientX;
+      this.posi.x = event.pageX;
       if(this.$route.path == '/view'){
-        this.posi.y = event.clientY - 55
+        this.posi.y = event.pageY - 55
       }else{
-        this.posi.y = event.clientY - 175;
+        this.posi.y = event.pageY - 175;
       }
       
       console.log(this.posi);

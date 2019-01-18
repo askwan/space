@@ -41,6 +41,7 @@
 import GlobalData from "../../jscript/GlobalData";
 // import { EventBus, MapEvent } from "../../jscript/event/Event.js";
 import map from "../../jscript/cesiumMap/map";
+import uiManage from "../../jscript/manage/uiManage.js";
 let timer;
 // let data;
 export default {
@@ -99,6 +100,9 @@ export default {
       let data = val.data;
       // console.log(val);
       let have = -1;
+      if(!GlobalData.disappearSobjectList){
+          GlobalData.disappearSobjectList = []
+      }
       GlobalData.disappearSobjectList.forEach((n, i) => {
         if (n == data.id) {
           have = i;
@@ -113,22 +117,25 @@ export default {
           GlobalData.disappearSobjectList.push(data.id);
         }
       }
-      map.viewer.scene.render()
+      map.viewer.scene.render();
     },
     checkchange(val) {
       // console.log(val);
       GlobalData.currentSelectObjectId = val.data.id;
       GlobalData.currentSelectObject = val.data;
-      map.viewer.scene.render()
+      map.viewer.scene.render();
     },
     rightEvent(event, obj, c, d) {
       event.stopPropagation();
       event.preventDefault();
       GlobalData.selectPick = obj;
       this.showMenu = true;
-      // console.log(event, obj);
-      this.posi.x = event.layerX + 14;
-      this.posi.y = event.layerY + 34;
+      console.log(event, obj, 789797);
+      console.log(uiManage.uiManage.getManage().objectUi);
+      //
+      let objs = uiManage.uiManage.getManage().objectUi;
+      this.posi.x = event.clientX - objs.left + 10 ;
+      this.posi.y = event.clientY - objs.top + 8;
       console.log(this.posi);
       clearTimeout(timer);
       timer = setTimeout(() => {
@@ -143,7 +150,7 @@ export default {
           destination: Cesium.Cartesian3.fromDegrees(
             geoBox.minx,
             geoBox.miny,
-            5000.0
+            500.0
           )
         });
       } else {
@@ -168,7 +175,7 @@ export default {
 .objectUi {
   .object-tree {
     height: 100%;
-    position: relative;
+    // position: relative;
     .filter-tree {
       .filter-tree-con {
         .t-icon {

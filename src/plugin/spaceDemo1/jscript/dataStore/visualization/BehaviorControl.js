@@ -5,14 +5,33 @@ import map from '../../cesiumMap/map'
 export default class BehaviorPrimitive {
   constructor(sobject){
     this.sobject = sobject;
-    // console.log(map,'map');
     let geom = sobject.forms[0].geom;
-    var CartographicCenter = new Cesium.Cartographic(Cesium.Math.toRadians(geom.coordinates[0]), Cesium.Math.toRadians(geom.coordinates[1]), 500);
+    var CartographicCenter = new Cesium.Cartographic(Cesium.Math.toRadians(geom.coordinates[0]), Cesium.Math.toRadians(geom.coordinates[1]), 50);
     let scanColor = new Cesium.Color(0, 1.0, 0.0, 1);
-    console.log(CartographicCenter,geom);
 
-    AddRadarScanPostStage(map.viewer, new Cesium.Cartographic(Cesium.Math.toRadians(geom.coordinates[0]), Cesium.Math.toRadians(geom.coordinates[1]), 50), 30, scanColor, 1000);
+    this.primitive = {};
+    this.postProcessStageCollection = new Cesium.PostProcessStageCollection();
+    this.entityCollection = new Cesium.PolylineCollection();
 
+    var circle = new Cesium.CircleGeometry({
+        center : Cesium.Cartesian3.fromDegrees(geom.coordinates[0], geom.coordinates[1]),
+        radius : 100.0
+    });
+    // let geometry = Cesium.CircleGeometry.createGeometry(circle);
+    let instance = new Cesium.GeometryInstance({
+      geometry: circle
+    })
+    this.primitive = new Cesium.Primitive({
+      geometryInstances:instance,
+      appearance: new Cesium.EllipsoidSurfaceAppearance({
+          material:Cesium.Material.fromType('Stripe')
+      })
+    })
+    // map.viewer.scene.primitives.add(this.primitive)
+  }
+  update(frameState){
+
+    this.primitive.update(frameState);
   }
 }
 
@@ -32,7 +51,6 @@ const transformLatLng = (options)=>{
 
 
 function AddRadarScanPostStage(viewer, cartographicCenter, radius, scanColor, duration) {
-  console.log('scal')
   var ScanSegmentShader =
       "uniform sampler2D colorTexture;\n" +
       "uniform sampler2D depthTexture;\n" +
@@ -110,10 +128,10 @@ function AddRadarScanPostStage(viewer, cartographicCenter, radius, scanColor, du
   var _Cartesian4Center = new Cesium.Cartesian4(_Cartesian3Center.x, _Cartesian3Center.y, _Cartesian3Center.z, 1);
 
   var _CartographicCenter1 = new Cesium.Cartographic(cartographicCenter.longitude, cartographicCenter.latitude, cartographicCenter.height + 500);
-  console.log(_CartographicCenter1,'_CartographicCenter1')
+//   console.log(_CartographicCenter1,'_CartographicCenter1')
   var _Cartesian3Center1 = Cesium.Cartographic.toCartesian(_CartographicCenter1);
   var _Cartesian4Center1 = new Cesium.Cartesian4(_Cartesian3Center1.x, _Cartesian3Center1.y, _Cartesian3Center1.z, 1);
-  console.log(_Cartesian4Center1,'_Cartesian4Center1')
+//   console.log(_Cartesian4Center1,'_Cartesian4Center1')
 
   var _CartographicCenter2 = new Cesium.Cartographic(cartographicCenter.longitude + Cesium.Math.toRadians(0.001), cartographicCenter.latitude, cartographicCenter.height);
   var _Cartesian3Center2 = Cesium.Cartographic.toCartesian(_CartographicCenter2);
@@ -171,6 +189,7 @@ function AddRadarScanPostStage(viewer, cartographicCenter, radius, scanColor, du
           u_scanColor: scanColor
       }
   });
+  return ScanPostStage
 
-  viewer.scene.postProcessStages.add(ScanPostStage);
+//   viewer.scene.postProcessStages.add(ScanPostStage);
 }

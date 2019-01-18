@@ -60,7 +60,7 @@ $nav-height:50px;
 .app-content{
   height: 100%;
   overflow: hidden;
-  position: relative;
+  // position: relative;
   // top: 50px;
   // left: 19%;
   overflow-y: auto;

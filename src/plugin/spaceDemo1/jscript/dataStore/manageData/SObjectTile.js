@@ -47,7 +47,6 @@ class SObjectTile {
 
     for (let i = 0; i < list.length; i++) {
       let sobject = list[i]
-
       if (sobject.forms && sobject.forms.length > 0) {
         if (!this.sobjectAll[sobject.id]) {
           this.sobjectAll[sobject.id] = []
@@ -64,7 +63,6 @@ class SObjectTile {
       let sobject = this.primitiveList[i]
       this.primitiveList[i] = this.priSort(sobject)
     }
-
   }
   //冒泡
   vidSort(arr) {
@@ -105,20 +103,26 @@ class SObjectTile {
       primitive: [],
       sobject: null,
       trajectory: null,
-      relation: null
+      relation: null,
+      behavior:null
     }
     let primitive = this.createPrimitive(sobject)
+
+
     let trajectory = null
     let relation = null
     if (sobject.network && sobject.network.nodes.length > 0) {
-      relation = new SObjectRelationPrimitive(sobject)
+      relation = new SObjectRelationPrimitive(sobject);
+      // console.log(relation,'relation')
     }
     // if (GlobalData.historyOpen) {
     //   trajectory = new SObjectTrajectory(sobject,this.parameter.geoWkt)
     // }
     let behavior;
     if(sobject.otype.id==7126){
+      console.log(sobject)
       behavior = new BehaviorPrimitive(sobject);
+      // console.log(behavior,'behavior')
     }
 
     pri = {
@@ -128,12 +132,12 @@ class SObjectTile {
       relation: relation,
       behavior:behavior
     }
-    this.primitiveList[sobject.id].push(pri)
+    this.primitiveList[sobject.id].push(pri);
   }
   // 根据sobject创建渲染对象
   createPrimitive(sobject) {
+    let arr = []
     if (sobject.forms) {
-      let arr = []
       for (let i = 0; i < sobject.forms.length; i++) {
         let primitive = ''
         let form = sobject.forms[i]
@@ -142,7 +146,7 @@ class SObjectTile {
         } catch (error) {}
         if (form.type <= 23) {
           // 几何
-          if (form.style && form.style != null) {
+          if (form.style && form.style != "[]" && form.style != null) {
             let style = map.formStyleToStyle(form.style)
             if (style && style.style == 5) {
               // 服务类型的样式
@@ -158,6 +162,7 @@ class SObjectTile {
         } else if (form.type == 50) {
           // 模型
           primitive = new SObjectFormModel(form, sobject)
+
         } else if (form.type == 40) {
           // bim数据
 
@@ -166,8 +171,9 @@ class SObjectTile {
         }
         arr.push(primitive)
       }
-      return arr
     }
+    return arr
+
   }
 
   getPrimitive(ids) {
@@ -191,22 +197,25 @@ class SObjectTile {
 
     for (let i in this.primitiveList) {
       let pri = this.primitiveList[i]
-      let length= pri.length
+      let length = pri.length
       for (let q = 0; q < length; q++) {
         let primitive = pri[q]
         let vid = primitive.sobject.version.vid
 
         let nextPrimitive
         let nextVid
-        if(q<length-1){
-          nextPrimitive=pri[q+1]
+        if (q < length - 1) {
+          nextPrimitive = pri[q + 1]
           nextVid = nextPrimitive.sobject.version.vid
-        }else{
-          nextVid = 10000*10000*10000*10000
+        } else {
+          nextVid = 10000 * 10000 * 10000 * 10000
 
         }
-
-        if (time.nowTime>=vid * 1000&&time.nowTime<nextVid * 1000) {
+        if (vid > 154780326930) {
+          vid = vid / 1000
+          nextVid = nextVid / 1000
+        }
+        if (time.nowTime >= vid * 1000 && time.nowTime < nextVid * 1000) {
           // 计算轨迹坐标与跟随
           if (GlobalData.historyOpen && primitive.trajectory) {
             // primitive.trajectory.countCoordinate(map.nowtime, primitive.primitive)
@@ -256,6 +265,10 @@ class SObjectTile {
                 primitive.relation.update(frameState)
               }
             }
+
+            if(primitive.behavior){
+              primitive.behavior.update(frameState);
+            }
           }
           break
         }
@@ -296,7 +309,7 @@ class SObjectTile {
         arr = arr.concat(parseStr(sobject.otype.models.models))
       }
       sobject.models.models = arr
-      console.log(arr)
+      // console.log(arr)
       // 如果有otype  加载行为
       if (otype) {
         this.createSobjectBehavior(sobject, otype)

@@ -39,6 +39,6 @@ export default {
   }
 }
 .location-show {
-  bottom: 110px;
+  // bottom: 100px;
 }
 </style>

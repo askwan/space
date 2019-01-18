@@ -13,7 +13,6 @@ import './assets/style.scss'
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
-
 import './bus'
 
 import * as state from '@/data'

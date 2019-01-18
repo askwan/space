@@ -48,6 +48,7 @@ class SObjectFormModel {
     }
   }
   createGltf(form) {
+   
     if (form.type == 50 && form.formref.refid > 0) {
       this._primitive = this.createModel(form)
       this.animation()

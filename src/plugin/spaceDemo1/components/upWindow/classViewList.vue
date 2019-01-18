@@ -59,6 +59,9 @@ export default {
       if (b) {
       } else {
       }
+      if(!GlobalData.disappearList){
+        GlobalData.disappearList = []
+      }
       GlobalData.disappearList.forEach((n, i) => {
         if (n == a.id) {
           have = i;

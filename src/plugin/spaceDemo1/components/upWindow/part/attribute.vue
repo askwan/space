@@ -29,7 +29,7 @@ export default {
   components: {},
   computed: {},
   watch: {
-    "getNum.currentSelectObject"() {
+    "getNum.currentSelectObjectId"() {
       this.aimObj = this.getNum.currentSelectObject;
     }
   },

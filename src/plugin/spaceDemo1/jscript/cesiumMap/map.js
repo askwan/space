@@ -31,7 +31,7 @@ class Map {
       timeline: false, // 是否显示时间轴 
       animation: false, // 是否创建动画小器件，左下角仪表 
       // requestRenderMode: false, // 启用请求渲染模式
-      requestRenderMode: false, // 启用请求渲染模式
+      requestRenderMode: true, // 启用请求渲染模式
       scene3DOnly: true, // 如果设置为true，则所有几何图形以3D模式绘制以节约GPU资源 
       navigationHelpButton: false, // 是否显示右上角的帮助按钮 
       navigationInstructionsInitiallyVisible: false,
@@ -90,7 +90,6 @@ class Map {
   addPrimitive(fn) {
     let scene = this.viewer.scene
     //总数据
-
     scene.primitives.add(mapDataStore)
     scene.primitives.add(historyDataStroe)
 
@@ -98,6 +97,7 @@ class Map {
 
     scene.primitives.add(this.measurementPolyline)
     scene.primitives.add(this.measurementLabel)
+
 
     fn()
     // 倾斜摄影

@@ -1,17 +1,21 @@
 <template>
   <div class="home">
-      <!-- <div class="header" id="demo">
-          <div class="canvaszz"> </div>
-          <canvas id="canvas"></canvas>
-      </div> -->
+    <!-- <canvas id="J_dotLine" style="background-color: rgba(204, 201, 201, 0.726);width:100%;height:100%"></canvas> -->
+    <!-- <div class="header" id="demo">
+        <div class="canvaszz"> </div>
+        <canvas id="canvas"></canvas>
+    </div> -->
     <div class="content">
-      <div class="leader cle">
+      <!-- <div class="leader cle">
         <b>App</b>
         <div class="tab-but">
           <el-button type="primary" @click="jump()" plain>创建App</el-button>
         </div>
-      </div>
-      <div class="con">
+      </div> -->
+      <div class="con cle">
+        <div class="tab-but">
+          <el-button type="primary" @click="jump()" plain>创建App</el-button>
+        </div>
         <!-- tab页 -->
         <el-tabs v-model="activeName">
           <el-tab-pane v-for="(n,i) in tabObj" :key="i" :label="n.tab" :name="n.name">
@@ -137,6 +141,8 @@ export default {
   mounted() {
     // background.start();
 
+    // background.rotate()
+
     this.init();
     console.log(this.tabObj);
   },
@@ -218,6 +224,24 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+body {margin:0 auto;overflow:hidden;}  
+.header canvas {
+	width:100%;height:auto/*默认全屏显示 可自己设置高度640px*/;
+	display:inline-block;vertical-align:baseline;
+	position:absolute;
+	z-index:-1;
+    }
+.header .canvaszz{  /*用来解决视频右键菜单，用于视频上面的遮罩层*/
+    width:100%;
+    // background-image: url("./assets/images/in_top_bj.jpg");
+    height:640px;
+    position:absolute;
+    z-index:0;//10
+        filter:alpha(opacity=40);  
+            -moz-opacity:0.4;  
+            -khtml-opacity: 0.4;  
+            opacity: 0.4;
+    }
 .home {
   position: relative;
   .content {
@@ -227,32 +251,47 @@ export default {
     width: 1200px;
     // margin: 0 auto;
     background-color: #f8f8f8;
-    .leader {
-      padding: 10px 10px;
-      border-bottom: 1px solid #ccc;
+    // background-color: transparent;
 
-      & > b {
-        float: left;
-        font-size: 30px;
-      }
-      & > .tab-but {
-        float: right;
-      }
-    }
+    // .leader {
+    //   padding: 10px 10px;
+    //   border-bottom: 1px solid #ccc;
+    //   & > b {
+    //     float: left;
+    //     font-size: 30px;
+    //     // color: #2a5cad;
+    //   }
+    //   & > .tab-but {
+    //     float: right;
+    //   }
+    // }
     .con {
-      padding: 0 0 30px 0;
+      padding: 0 0 20px 0;
+      .tab-but{
+        position: absolute;
+        right: 22px;
+        top: 3px;
+        z-index: 1;
+        .el-button{
+          padding: 8px 20px;
+        }
+      }
       .cell-container {
-        height: 740px;
+        height: 810px;
         overflow-y: auto;
         & > ul {
           .item-card {
             float: left;
             width: 220px;
             border: 1px solid #ccc;
-            background-color: #fff;
+            // color: #066197;
+            background-color: rgba(255, 255, 255, 0.8);
+            // background: linear-gradient(#2a5cad, #eee);
             margin-right: 10px;
             margin-bottom: 10px;
+            margin: 6px 4px;
             padding-bottom: 5px;
+            transition: all linear 0.2s; 
             .item-con {
               padding-top: 5px;
               .ember-view {
@@ -343,6 +382,9 @@ export default {
               .el-icon-delete {
                 color: #f56c6c;
               }
+            }
+            &:hover{
+              box-shadow: 0 0 5px 2px rgba($color: #111, $alpha: 0.1);
             }
           }
         }

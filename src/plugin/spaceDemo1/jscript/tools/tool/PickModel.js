@@ -26,8 +26,14 @@ class PickModel extends ToolEvent {
         }
         if (primitive.sobjectForm.nodeRelation && Object.keys(primitive.sobjectForm.nodeRelation).length > 0 && !GlobalData.pickModelNode) {
           GlobalData.pickModelId = primitive.sobjectForm.sobject.id;
-          GlobalData.currentSelectObjectId = ''
-          GlobalData.currentSelectObject = ''
+          GlobalData.currentSelectObjectId = ep.node._name.split('-')[1];
+          GlobalData.currentSelectObject = '';
+
+          GlobalData.sobjectDatalist.forEach((n,i)=>{
+            if(n.id==GlobalData.currentSelectObjectId){
+              GlobalData.currentSelectObject = n;
+            }
+          })
           this.currentSobject()
           let mesh = ep.primitive.getMesh(ep.mesh.name)
           if (mesh) {

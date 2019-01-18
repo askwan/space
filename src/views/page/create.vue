@@ -8,6 +8,7 @@
     <div class="create-tabs">
         <el-form :label-position="labelPosition" :rules="rules" label-width="100px" :model="formLabelAlign" ref="ruleForm">
             <el-form-item label="图标 :" class="icon">
+                
                 <el-upload class="article-avatar-up" name="file" :action="imageUpload" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                     <img v-if="formLabelAlign.icon" :src="ImageUrl" class="article-avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon article-avatar-icon"></i>
@@ -20,16 +21,19 @@
                 <el-input v-model="formLabelAlign.des"></el-input>
             </el-form-item> -->
             <el-form-item label="UI框架">
+                <i class="el-form-item__label icon1" >*</i>
                 <el-select v-model="formLabelAlign.ui" placeholder="请选择" class="selected">
                     <el-option v-for="item in uis" :key="item.id" :label="item.name||item.id" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="场景">
+                <i class="el-form-item__label icon2">*</i>
                 <el-select v-model="formLabelAlign.view" placeholder="请选择" class="selected">
                     <el-option v-for="item in views" :key="item.id" :label="item.name||item.id" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="时空域">
+                <i class="el-form-item__label icon3">*</i>
                 <el-select v-model="formLabelAlign.domian" placeholder="请选择" class="selected" clearable>
                     <el-option v-for="item in sDomian" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
@@ -47,9 +51,12 @@
                 <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
-        <i class="el-form-item__label icon1">*</i>
+        <!-- <i class="el-form-item__label icon1">*</i>
         <i class="el-form-item__label icon2">*</i>
         <i class="el-form-item__label icon3">*</i>
+        <i class="el-form-item__label icon4">*</i> -->
+
+        <!-- <i class="el-form-item__label" :class="icon"></i> -->
     </div>
     </div>
 </template>
@@ -77,21 +84,6 @@ export default {
             { required: true, message: '请输入app名称', trigger: 'blur' },
             { min: 1, max: 60, message: '长度不超过60', trigger: 'blur' }
           ],
-        //   abc:[
-        //     { required: true, message: '请输入app名称', trigger: 'change' },
-        //     // { min: 1, max: 20, message: '不能为空', trigger: 'blur' }
-        //   ],
-        // abc: [{
-        //     required: true,
-        //     message: '请选择ui!',
-        //     trigger: 'change'
-        // }],
-        // pLanguage: [{
-        //     // type: 'number',
-        //     required: true,
-        //     message: '请选择场景!',
-        //     trigger: 'change'
-        // }]
       
         },
         views:[],
@@ -167,7 +159,7 @@ export default {
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-              let flag = this.formLabelAlign.name && this.formLabelAlign.ui && this.formLabelAlign.view
+              let flag = this.formLabelAlign.name && this.formLabelAlign.ui && this.formLabelAlign.view && this.formLabelAlign.domian
             if(!flag){
                 return this.$message.error('请填写完整信息');
             }
@@ -281,7 +273,8 @@ export default {
 .create{
     width: 1200px;
     margin: 0 auto;
-    height: 1000px;
+    min-height:100% ;
+    padding-bottom: 20px;
     background-color: #f8f8f8;
    .leader{
     // margin-top: 1.55rem;
@@ -305,7 +298,7 @@ export default {
   }
   .create-tabs{
       width:80%;
-      margin:50px auto;
+      margin:50px auto 0 auto;
       position: relative;
       .selected{
           display: block;
@@ -333,19 +326,16 @@ export default {
 .el-form-item__label{
     color: #f56c6c;
     margin-right: 4px;
-    position: absolute;
+    // position: absolute;
  }
  .icon1{
-    top: 122px;
-    left: 47px;
+    margin-left: -67px;
  }
  .icon2{
-    top: 185px;
-    left: 32px;
+    margin-left: -54px;
  }
  .icon3{
-     top: 247px;
-     left: 45px;
+    margin-left: -68px;
  }
 }
 

@@ -20,78 +20,14 @@ class SObjectRelationPrimitive {
 
   update(frameState) {
     if (this.polylineCollection) {
-      // for (let i = 0; i < this.polylineCollection._polylines.length; i++) {
-      //   let model = this.polylineCollection._polylines[i]
-      //   let arr = this.getPosition(i)
-      //   if (arr && arr.length > 0) {
-      //     model.positions = Cesium.Cartesian3.fromDegreesArrayHeights(this.getPosition(i))
-      //   } else {
-      //     return
-      //   }
-      // }
+
       this.polylineCollection.update(frameState)
     }
   }
   orShow(val) {
     this.show = val
   }
-  getPosition(i) {
-    let pt1 = this.sobject.getSobjectNowPosition()
-    let pt2 = []
-    let ronode = this.sobject.network.nodes[i]
-    if (GlobalData.historyOpen) {
-     let list=historyDataStroe.SObjectAll.sobjectAll[ronode.relatedObjectId]
-for(let i=0;i<list.length;i++){
-  let sobject = list[i]
 
-  pt2 = sobject.getSobjectNowPosition()
-}
-      let version = historyDataStroe.versionAll[GlobalData.versionId]
-      if (version.sobjectTiles) {
-        for (let i in version.sobjectTiles) {
-          let tile = version.sobjectTiles[i]
-          if (tile.sobjectList) {
-            for (let q in tile.sobjectList) {
-              let sobject = tile.sobjectList[q]
-              if (ronode.relatedObjectId == sobject.id) {
-                pt2 = sobject.getSobjectNowPosition()
-              }
-            }
-          }
-        }
-      }
-      if (pt2.length < 1) {
-        pt2 = [ronode.point.x, ronode.point.y, ronode.point.z]
-      }
-    } else {
-      if (!ronode.point) {
-        return
-      }
-      pt2 = [ronode.point.x, ronode.point.y, ronode.point.z]
-      if (mapDataStore.lumpAll) {
-        for (let i in mapDataStore.lumpAll) {
-          let tile = mapDataStore.lumpAll[i]
-          if (tile.sobjectList) {
-            for (let q in tile.sobjectList) {
-              let sobject = tile.sobjectList[q]
-              if (ronode.relatedObjectId == sobject.id) {
-                pt2 = sobject.getSobjectNowPosition()
-              }
-            }
-          }
-        }
-      }
-    }
-    if (pt1.length < 3) {
-      pt1.push(0)
-    }
-    if (pt2.length < 3) {
-      pt2.push(0)
-    }
-    // let posis = pt1.concat(pt2)
-    let posis = this.dispose(pt1, pt2)
-    return posis
-  }
   processingData(sobject) {
     let pt1 = sobject.getSobjectNowPosition()
 
@@ -101,20 +37,13 @@ for(let i=0;i<list.length;i++){
         return
       }
       let pt2 = [ronode.point.x, ronode.point.y, ronode.point.z]
-      if (mapDataStore.lumpAll) {
-        for (let i in mapDataStore.lumpAll) {
-          let tile = mapDataStore.lumpAll[i]
-          if (tile.sobjectList) {
-            for (let q in tile.sobjectList) {
-              let sobject = tile.sobjectList[q]
-              if (ronode.relatedObjectId == sobject.id) {
-                pt2 = sobject.getSobjectNowPosition()
-              }
-            }
+      if (mapDataStore.sobjectData) {
+        mapDataStore.sobjectData.forEach((n, q) => {
+          if (ronode.relatedObjectId == n.id) {
+            pt2 = n.getSobjectNowPosition()
           }
-        }
+        })
       }
-
       if (pt1.length < 3) {
         pt1.push(0)
       }

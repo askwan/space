@@ -94,6 +94,7 @@ class SObjectFormGeometry {
     this.pitch = false
   }
   createGeometry(form) {
+   
     try {
       // this.cesiumStyle = StyleCtrl.getGeomFormStyle(this.sobject, this.form)
       // console.log(this.sobject, this.form)
@@ -104,6 +105,7 @@ class SObjectFormGeometry {
       // this.cesiumStyle.opacity=c.opacity
       // console.log(this.cesiumStyle)
       // console.log(getColor.getColor(this.sobject))
+
       if (form.type == 21) {
         this._primitiveLabel = this.createLabel(form)
         this._primitive = this.createPoint(form)

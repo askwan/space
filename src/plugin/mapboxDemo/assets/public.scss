@@ -97,34 +97,34 @@
       // overflow: scroll;
     }
   }
-  .upwindow {
-    height: 100%;
-    .object-tree {
-      .el-input {
-        .el-input__inner {
-          height: 30px;
-          line-height: 30px;
-        }
-      }
 
-      .el-tree {
-        height: calc(100% - 30px);
-        overflow-y: auto;
-        background-color: transparent;
-
-        .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
-          background-color: transparent;
-        }
-
-        .el-tree-node .el-tree-node__content {
-          background-color: transparent;  //////
-          color: #fff;
-        }
-      }
-    }
-
-  }
   .left-n,.right-n{
+    .upwindow {
+      height: 100%;
+      .object-tree {
+        .el-input {
+          .el-input__inner {
+            height: 30px;
+            line-height: 30px;
+          }
+        }
+        .el-tree {
+          height: calc(100% - 30px);
+          overflow-y: auto;
+          background-color: transparent;
+
+          .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+            background-color: transparent;
+          }
+
+          .el-tree-node .el-tree-node__content {
+            background-color: transparent;  //////
+            color: #fff;
+          }
+        }
+      }
+
+    }
     .el-carousel{
       .form-tab,.relation-content{
         .el-collapse-item{

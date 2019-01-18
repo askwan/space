@@ -13,6 +13,7 @@
 import axios from "axios";
 const psdeBaseUrl = "http://bt1.geosts.ac.cn/api";
 const psdeHost = psdeBaseUrl + "/dae/datastore";
+// const psdeHost='http://192.168.1.133:8001'
 const psdeUrl = psdeHost + "/rest/v0.1.0/datastore/";
 
 import map from "../jscript/cesiumMap/map";
@@ -178,6 +179,21 @@ export default {
               arr.push(newSobj);
             }
             this.getTreeList(arr);
+            let modelList = [];
+            // console.log(GlobalData.sobjectDatalist,'list');
+            GlobalData.sobjectDatalist.forEach(object=>{
+              let models = object.getModels();
+              models.forEach(model=>{
+                let index = modelList.find(el=>el==model.id);
+                if(!index) modelList.push(model.id)
+              })
+            })
+            console.log(modelList,'list');
+            let ids = modelList.join(',');
+            axios.get(psdeUrl+'/model/query?ids='+ids).then(res=>{
+              console.log(res,'res')                
+            })
+
             mapDataStore.createSobjectTile(GlobalData.sobjectDatalist);
           }
         })

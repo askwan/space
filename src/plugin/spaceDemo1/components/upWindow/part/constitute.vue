@@ -35,8 +35,10 @@ export default {
     "getNum.currentSelectObjectId"() {
       this.parents = [];
       this.aimObj = this.getNum.currentSelectObject;
-      this.getNum.sobjectDatalist.forEach((n, i) => {
-        this.aimObj.parents.forEach((q, w) => {
+      let array = this.getNum.sobjectDatalist || [];
+      array.forEach((n, i) => {
+        let arr =  this.aimObj.parents || [];
+        arr.forEach((q, w) => {
           if (n.id == q.id) {
             this.parents.push(n);
           }

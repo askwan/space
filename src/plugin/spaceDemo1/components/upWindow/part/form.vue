@@ -76,10 +76,10 @@ export default {
   filters:{
     styleForm(val){
       let emptyArr = []
-      let arr = JSON.parse(val)
+      let arr = JSON.parse(val) || []
       // console.log(obj,7897890)
       // console.log(GlobalData.styleList,222222)
-      let styleArr = GlobalData.styleList
+      let styleArr = GlobalData.styleList || []
       styleArr.forEach(e=>{
         arr.forEach(f=>{
         if(e.id == f){
